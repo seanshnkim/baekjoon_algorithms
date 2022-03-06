@@ -1,33 +1,33 @@
 from collections import deque
 
-def dfs(n, computers, start, visited):
+def dfs_count(n, computers, start, visited):
     visited[start] = True
     count = 0
     for node in range(n):
         if visited[node] == False and computers[start][node] == 1:
-             count = dfs(n, computers, node, visited)
+             count = dfs_count(n, computers, node, visited)
     return count
 
-def solution_others(n, computers):
+def solution_count(n, computers):
     visited = [False] * n
     answer = 0
     for node in range(n):
         if visited[node] == False:
             answer += 1
-            _ = dfs(n, computers, node, visited)
+            _ = dfs_count(n, computers, node, visited)
     return answer
 
-def dfs_printed(visitedList, node, computers):
+def dfs_visualize(visitedList, node, computers):
     visitedList[node] = True
     nodeNum = len(computers)
     part = []
     for n in range(nodeNum):
         if computers[node][n] == 1 and visitedList[n] == False:
-            part += dfs_printed(visitedList, n, computers)
+            part += dfs_visualize(visitedList, n, computers)
 
     return [node] + part
 
-def solution_printed(computers):
+def solution_visualize(computers):
     nodeNum = len(computers)
     try:
         for n in range(nodeNum):
@@ -42,10 +42,10 @@ def solution_printed(computers):
     for n in range(nodeNum):
         if visited[n] == False:
             connected.append([])
-            connected[-1] += dfs_printed(visited, n, computers)
+            connected[-1] += dfs_visualize(visited, n, computers)
     return connected
 
-
+def
 
 test_comp1 = [[1,1,1,0],
              [1,1,1,0],
@@ -82,8 +82,8 @@ testCases = [test_comp1, test_comp2, test_comp3, test_comp4, test_comp5, test_co
 
 
 for i in range(len(testCases)):
-    print(f'{i+1}th test: {solution_printed(testCases[i])}')
-    print(f'{i + 1}th test: {solution_others(len(testCases[i]), testCases[i])}')
+    print(f'{i+1}th test: {solution_visualize(testCases[i])}')
+    print(f'{i + 1}th test: {solution_count(len(testCases[i]), testCases[i])}')
 
 
 
