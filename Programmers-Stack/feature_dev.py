@@ -115,3 +115,5 @@ def solution_best(progresses, speeds):
             time += 1
     answer.append(count)
     return answer
+
+# deque를 사용하면 더 빠르다고 한다: https://leonkong.cc/posts/python-deque.html

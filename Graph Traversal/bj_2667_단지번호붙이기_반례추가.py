@@ -40,6 +40,7 @@ visited = [False for _ in range(numNode)]
 for i in range(sizeOfMap):
     for j in range(sizeOfMap):
         currIdx = i*sizeOfMap + j
+        # add current node(start) to adjNodes as well (자기 자신 노드를 인접 노드 리스트에 추가한다)
         adjNodes = [currIdx]
         if sqrMap[i][j] == '1':
             if j != 0 and sqrMap[i][j-1] == '1':
@@ -53,6 +54,7 @@ for i in range(sizeOfMap):
         
             adjNodeList[currIdx].extend(adjNodes)
         else:
+            # 어떻게 0인 노드를 구별할 것인가? ==> 80번째 줄
             adjNodeList[currIdx].append(-1)
 
 
@@ -74,6 +76,7 @@ def bfs(adjNodeList, visited, start):
 cntConNodeList = []
 cntSubgraph = 0
 for n in range(numNode):
+    
     if not visited[n] and adjNodeList[n][0] != -1:
         cntSubgraph += 1
         cntConNodeList.append(bfs(adjNodeList, visited, n))
