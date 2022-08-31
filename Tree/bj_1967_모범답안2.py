@@ -11,6 +11,14 @@ input = sys.stdin.readline
 left는 두번째로 큰 subtree, right는 가장 큰 subtree를 의미한다.
 global 변수로 answer를 두는 건 어쩔 수 없는 것 같다. 결국 dfs가 반환하는 값은 가장 큰 거리이지 subtree의 지름이 아니기 때문'''
 
+'''그리고 input의 형태는 어차피 node 번호가 1부터 순서대로 들어오는 거니까, dictionary를
+쓸 필요가 없다.'''
+
+'''이 알고리즘, 가만 분석해보니 answer라는 global 변수를 설정하고 매 스텝마다 answer 값을
+갱신해나간다. 단순히 child node의 가장 큰 거리만을 구해서는 해결할 수 없는 문제이기 때문이다.
+이 문제는 weight가 모두 1로 주어져있을 때와는 다른 접근 방식이 필요한 문제다.
+weight가 모두 1이라면, 단순히 subtree의 깊이만을 계산하는 것이고 dfs로 해결할 수 있기 때문이다. '''
+
 def dfs(num):
     global answer
     if graph[num]:
