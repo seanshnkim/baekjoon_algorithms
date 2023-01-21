@@ -1,3 +1,4 @@
+# 참고: https://velog.io/@woga1999/파이썬으로-구현하는-링크드-리스트
 class Node:
     def __init__(self, data):
         self.data = data
@@ -13,6 +14,7 @@ class LinkedList:
             print(curr_head.data, end=' ')
             curr_head = curr_head.next
     
+    # get node with its index
     def get_node(self, index):
         if self.head is None:
             print("Linked list is empty")
@@ -65,13 +67,9 @@ class LinkedList:
             last = last.next
         last.next = new_node
 
+    # delete node with its value(key)
     def delete_node(self, key):
         temp = self.head
-        if temp is not None:
-            if temp.data == key:
-                self.head = temp.next
-                temp = None
-                return
         while temp is not None:
             if temp.data == key:
                 break
@@ -108,6 +106,8 @@ class LinkedList:
             temp = temp.next
         return count
 
+    # Linked list starts searching from head. This is why linked lists have O(n) search time.
+    # Linked lists have a performance advantage over normal lists when implementing a queue.
     def search(self, x):
         current = self.head
         while current != None:
