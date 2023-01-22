@@ -27,17 +27,18 @@ for sample in product(availables, repeat=digit):
 if availables:
     # D-1 자릿수의 숫자를 테스트
     if digit > 1:
-        max_low_d = sum(availables[-1]*10**(digit-i-2) for i in range(digit-1))
-        min_diff = min(min_diff, abs(targ - max_low_d) + digit-1)
+        min_diff_low_d = targ - 10**(digit-2)
+        for sample in product(availables, repeat=digit-1):
+            sample_num = sum(sample[i]*10**(digit-i-2) for i in range(digit-1))
+            min_diff_low_d = min(min_diff_low_d, abs(targ - sample_num))
+        min_diff = min(min_diff, min_diff_low_d + digit-1)
     
     # D+1 자릿수의 숫자를 테스트
-    if availables[0] == 0 and len(availables) > 1:
-        smallest_d = availables[1]
-    else:
-        smallest_d = availables[0]
-    
-    min_great_d = sum(smallest_d*10**(digit-i) for i in range(digit+1))
-    min_diff = min(min_diff, abs(min_great_d - targ) + digit+1) 
+    min_diff_great_d = (10**(digit+1) - 1) - targ
+    for sample in product(availables, repeat=digit+1):
+        sample_num = sum(sample[i]*10**(digit-i) for i in range(digit+1))
+        min_diff_great_d = min(min_diff_great_d, abs(sample_num - targ))
+    min_diff = min(min_diff, min_diff_great_d + digit+1) 
 
     
 print(min_diff)
@@ -53,5 +54,19 @@ output(false): 88893
 --> if the number of digits of targ is D, it can start from D+1 digit number
 (만약 목표 targ 값이 D 자릿수라면, D+1 자릿수부터 시작해서 1씩 빼면서 최소 차이값을
 구할 수 있다)
+
+Counterexample 2:
+7
+7
+3 4 5 6 7 8 9
+expected(answer): 5
+output(false): 6
+
+Counterexample 3:
+14
+2
+1 5
+expected(answer): 6
+output(false): 7
 '''
 
