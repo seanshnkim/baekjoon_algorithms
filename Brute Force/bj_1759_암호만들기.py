@@ -28,5 +28,5 @@ def solution(substr, start):
 
     return
 
-solution(alphabets[0], 0)
+solution('', -1)
 
