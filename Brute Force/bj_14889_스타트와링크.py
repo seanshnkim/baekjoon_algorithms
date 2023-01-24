@@ -12,9 +12,7 @@ def diff_sums(teamA, teamB):
     sumA = sumB = 0
     
     for i in range(N//2):
-        for j in range(N//2):
-            if i == j:
-                continue
+        for j in range(i+1, N//2):
             sumA += arr_2D[teamA[i]][teamA[j]] + arr_2D[teamA[j]][teamA[i]]
             sumB += arr_2D[teamB[i]][teamB[j]] + arr_2D[teamB[j]][teamB[i]]
     
@@ -34,13 +32,23 @@ def solution(idx, teamA, teamB):
     if idx == N:
         return -1
     
-    t1 = solution(idx+1, teamA+[idx+1], teamB)
-    t2 = solution(idx+1, teamA, teamB+[idx+1])
-    
-    # min_diff는 -1이 나올 수도 있다.
     min_diff = -1
-    if t1 != -1 and t2 != -1:
-        min_diff = min(t1, t2)
+    # min_diff가 -1 값을 그대로 유지한 채 나올 수 있다.
+    '''
+    A = solution(idx+1, teamA+[idx+1], teamB)
+    tB = solution(idx+1, teamA, teamB+[idx+1])
+    if tA != -1 and tB != -1:
+        min_diff = min(tA, tB)
+    return min_diff
+    '''
+    # 아래와 같이 min_diff == -1이면 반드시 업데이트를 하도록 if문 조건에 추가해줘야 함
+    tA = solution(idx+1, teamA+[idx+1], teamB)
+    if min_diff == -1 or (tA != -1 and min_diff > tA):
+        min_diff = tA
+    tB = solution(idx+1, teamA, teamB+[idx+1])
+    if min_diff == -1 or (tB != -1 and min_diff > tB):
+        min_diff = tB
+    
     return min_diff
 
 # print(solution(0, [], []))
