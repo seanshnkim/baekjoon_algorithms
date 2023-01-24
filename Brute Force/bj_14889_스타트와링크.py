@@ -8,37 +8,40 @@ for _ in range(N):
     arr_2D.append(list(map(int, sys.stdin.readline().split())))
 
 
-def sums(new, teamA, teamB):
+def diff_sums(teamA, teamB):
     sumA = sumB = 0
     
-    for a,b in zip(teamA, teamB):
-        sumA += (arr_2D[a][new] + arr_2D[new][a])
-        sumB += (arr_2D[b][new] + arr_2D[new][b])
+    for i in range(N//2):
+        for j in range(N//2):
+            if i == j:
+                continue
+            sumA += arr_2D[teamA[i]][teamA[j]] + arr_2D[teamA[j]][teamA[i]]
+            sumB += arr_2D[teamB[i]][teamB[j]] + arr_2D[teamB[j]][teamB[i]]
     
-    return sumA, sumB
+    return abs(sumA - sumB)
 
 
-def solution(idx, teamA, teamB, sumA, sumB):
-    global min_diff
+def solution(idx, teamA, teamB):
     
     if len(teamA) > N//2 or len(teamB) > N//2:
-        return float('inf')
+        return -1
     
     # if len(teamA) == N//2 and len(teamB) == N//2:
     #     return abs( (sumA+new_sumA) - (sumB+new_sumB) )
     if len(teamA) == N//2 and len(teamB) == N//2:
-        min_diff = min(min_diff, abs(sumA - sumB))
+        return diff_sums(teamA, teamB)
     
     if idx == N:
-        return float('inf')
+        return -1
     
-    new_sumA, new_sumB= sums(idx, teamA, teamB)
+    t1 = solution(idx+1, teamA+[idx+1], teamB)
+    t2 = solution(idx+1, teamA, teamB+[idx+1])
     
-    for i in range(idx, N):
-        min_diff = min(solution(i+1, teamA+[i], teamB, sumA+new_sumA, sumB), \
-                       solution(i+1, teamA, teamB+[i], sumA, sumB+new_sumB))
-    
+    # min_diff는 -1이 나올 수도 있다.
+    min_diff = -1
+    if t1 != -1 and t2 != -1:
+        min_diff = min(t1, t2)
     return min_diff
 
-min_diff = float('inf')
-print(solution(0, [], [], 0, 0))
+# print(solution(0, [], []))
+print(solution(-1, [], []))
