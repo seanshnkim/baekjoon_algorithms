@@ -16,9 +16,12 @@ def solution(idx, curr_str):
         complete_nums.append(curr_str)
         return
     for n in range(10):
-        if idx == 0 or (str(n) not in curr_str and is_next(idx, curr_str, n)):
+        if str(n) not in curr_str and is_next(idx, curr_str, n):
             solution(idx+1, curr_str+str(n))
     return
 
+
+for i in range(10):
+    solution(0, str(i))
 print(max(complete_nums))
 print(min(complete_nums))
