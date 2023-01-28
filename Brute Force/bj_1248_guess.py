@@ -63,5 +63,5 @@ def solution(idx, cumul_nums, idx_sums):
 
 
 solution(0, [], [])
-print(possible_nums[0])
+print(answers[0])
 
