@@ -18,28 +18,23 @@ for i in range(N):
         cnt += 1
         
         
-def ok(idx):
-    for i in range(idx):
-        s = 0
-        for j in range(i, idx):
-            s += ans[j]
-            if i == j:
-                continue
-            if sign[i][j] == 0:
-                if s != 0:
-                    return False
-            elif sign[i][j] > 0:
-                if s <= 0:
-                    return False
-            elif sign[i][j] < 0:
-                if s >= 0:
-                    return False
+def ok(curr_num, idx):
+    s = curr_num
+    for i in reversed(range(idx)):
+        s += ans[i]
+        if sign[i][idx] < 0 and s >= 0:
+            return False
+        elif sign[i][idx] > 0 and s <= 0:
+            return False
+        elif sign[i][idx] == 0 and s != 0:
+            return False
     return True
 
 
 def solution(idx):
     if idx == N:
-        return ok(idx)
+        # return ok(ans[idx-1], idx)
+        return True
     
     # 1st: sign of ith number
     sign_of_ith = sign[idx][idx]
@@ -52,9 +47,9 @@ def solution(idx):
         curr_range = range(0, 1)
         
     # 2nd: sign of ith sum
-    for i in curr_range:
-        if ok(idx):
-            ans[idx] = i
+    for n in curr_range:
+        if ok(n, idx):
+            ans[idx] = n
             if solution(idx+1):
                 return True
     return False
@@ -62,6 +57,3 @@ def solution(idx):
 
 solution(0)
 print(' '.join(map(str, ans)))
-
-
-
