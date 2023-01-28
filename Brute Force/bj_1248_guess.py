@@ -2,12 +2,11 @@ import sys
 
 N = int(sys.stdin.readline())
 signs = sys.stdin.readline()
-possible_nums = []
-sum_list = [[0 for _ in range(N)] for _ in range(N)]
+answers = []
+# sum_list = [[0 for _ in range(N)] for _ in range(N)]
 
 sign_matrix = [['*' for _ in range(N)] for _ in range(N)]
 start = 0
-# for i in reversed(range(1, N+1)):
 for i in range(N):
     sign_matrix[i][i:] = signs[start:start+(N-i)]
     start += (N-i)
@@ -23,9 +22,9 @@ def compare(curr_sum, sign):
     return False
 
 
-def solution(idx, curr_nums):
+def solution(idx, cumul_nums, idx_sums):
     if idx == N:
-        possible_nums.append(curr_nums)
+        answers.append(cumul_nums)
         return
     
     sign_of_ith = sign_matrix[idx][idx]
@@ -39,22 +38,30 @@ def solution(idx, curr_nums):
     
     for n in curr_range:
         if idx == 0:
-            sum_list[0][0] = n
-            solution(idx+1, curr_nums+[n])
+            idx_sums = [n]
+            solution(idx+1, cumul_nums+[n], idx_sums)
         else:
+            possible_nums = []
+            new_idx_sums = []
             for i in range(idx):
-                sum_up_to_idx = sum_list[i][idx-1] + n
-                if compare(sum_up_to_idx, sign_matrix[i][idx]):
-                    # update sum_list
-                    for j in range(idx+1):
-                        sum_list[j][idx] += sum_list[j][idx-1] + n
-                    solution(idx+1, curr_nums+[n])
-                    # 이렇게 해서 꼭 다시 리셋해주어야 함
-                    for j in range(idx+1):
-                        sum_list[j][idx] -= sum_list[j][idx-1] + n
+                if compare(idx_sums[i]+n, sign_matrix[i][idx]):
+                    # 아 여기서 AND로 솎아냈어야 했는데 그냥 OR로 처리했다.
+                    possible_nums.append(n)
+                    
+    if idx != 0:
+        new_idx_sums.append(idx_sums[i]+n)
+        new_idx_sums.append(n)
+    
+        for n in possible_nums:
+            for i in range(idx):
+                new_idx_sums.append(idx_sums[i]+n)
+            new_idx_sums.append(n)
+            
+            solution(idx+1, cumul_nums+[n], new_idx_sums)
+    
     return
 
 
-solution(0, [])
+solution(0, [], [])
 print(possible_nums[0])
 
