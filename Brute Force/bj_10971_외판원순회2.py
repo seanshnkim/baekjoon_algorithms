@@ -8,11 +8,10 @@ for _ in range(N):
 
 
 def solution(curr_path, curr_W_sum):
-    # 돌아오는 것도 가능해야 한다!
     if len(curr_path) == N:
-        curr_weight = W_matrix[curr_path[-1]][curr_path[0]]
+        curr_weight = W_matrix[curr_path[-1]][0]
         if curr_weight > 0:
-            answers.append(curr_W_sum + curr_weight)
+            answers.append(curr_W_sum+curr_weight)
         return
     
     for i in range(1, N):
