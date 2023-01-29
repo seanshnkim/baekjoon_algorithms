@@ -13,17 +13,13 @@ def solution(curr_path, curr_W_sum):
         answers.append(curr_W_sum)
         return
     
-    
-    max_W = curr_W_sum
-    for i in range(N):
+    for i in range(1, N):
         if i in curr_path:
             continue
-        if not curr_path:
-            solution([i], 0)
         else:
             solution(curr_path+[i], curr_W_sum + W_matrix[curr_path[-1]][i])
     return 
 
 
-solution([], 0)
+solution([0], 0)
 print(min(answers))
