@@ -9,7 +9,7 @@ for _ in range(H):
 max_sum = 0
 #REVIEW - range(1<<(H*W)), range(1<<(H*W+1))
 # K 자리수의 이진수 중 가장 큰 수는 2^(K-1) 이다.
-# range(1<<K) = 0, 1, 2... 2^(K-1)
+# range(1<<K) = 0, 1, 2 ... 2^(K-1)
 for bitmask in range(1<<(H*W)):
     curr_board_sum = 0
     checked = [False for _ in range(H*W)]
