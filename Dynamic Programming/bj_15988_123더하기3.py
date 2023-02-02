@@ -22,4 +22,4 @@ for i in range(4, MAX_N+1):
 n_test_case = int(sys.stdin.readline())
 for t in range(n_test_case):
     N = int(sys.stdin.readline())
-    print(sum(dp[N]))
+    print(sum(dp[N]) % modM)
