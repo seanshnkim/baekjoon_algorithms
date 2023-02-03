@@ -10,9 +10,12 @@ def dfs(v, flag):
     visited[v] = flag
     for adj_v in adj_list[v]:
         if visited[adj_v] == -1:
-            # if visited[v] == 0,  0^1 = 1 -> graph A
-            # if visited[v] == 1,  1^1 = 0 -> graph B
-            dfs(adj_v, flag^1)
+            
+            #FIXME - dfs(adj_v, flag^1)로 그대로 냅두면
+            # 
+            # if visited[v] == 0(1),  0^1 = 1 (1^1 = 0) -> graph A (graph B)
+            if not dfs(adj_v, flag^1):
+                return False
         elif visited[adj_v] == visited[v]:
             return False
     return True
