@@ -13,7 +13,9 @@ def bfs(q):
         
         next_locs = [curr_loc-1, curr_loc+1, curr_loc*2]
         for next in next_locs:
-            if 0 <= next and next <= MAX_N:
+            # FIXME - if 0 <= next and next <= MAX_N:
+            # 범위 실수, 사소한 실수 고치자
+            if 0 <= next and next < MAX_N:
                 if next == targ:
                     return curr_depth+1
                 if depths[next] == -1:
