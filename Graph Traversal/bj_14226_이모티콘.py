@@ -26,13 +26,13 @@ def bfs(q):
                       [e, e]]
         for next in next_steps:
             if 0 <= next[0] < MAX_N:
-                if visited[next[0]][next[1]] == -1 or \
-                    visited[next[0]][next[1]] > visited[e][c] + 1:
+                if visited[next[0]][next[1]] == -1:
                         
                     visited[next[0]][next[1]] = visited[e][c] + 1
                     q.append(next)
     
-    return min(i for i in visited[N] if i > -1)
+    return
+    # return min(i for i in visited[N] if i > -1)
 
 q = deque([[1, 0]])
 print(bfs(q))
