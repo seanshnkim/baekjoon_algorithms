@@ -4,49 +4,35 @@ from collections import deque
 MAX_N = 1001
 N = int(sys.stdin.readline())
 
-# visited[k] = k개의 이모티콘을 (화면에) 만들었을 때 [cnt, n_clipboard] 쌍(cnt는 시간, n_clipboard는 클립보드에 저장된 단어 개수)
-visited = [[-1, 0] for _ in range(MAX_N)]
-visited[1] = [1, 0]
+# e: 현재 화면에 있는 이모티콘의 개수
+# c: 현제 클립보드에 저장된 이모티콘의 개수
+# visited[e][c] = minimum count(depth)
+visited = [[-1]*MAX_N for _ in range(MAX_N)]
 
 def bfs(q):
     while q:
         curr = q.popleft()
+        # e: 현재 화면에 있는 이모티콘의 개수
+        # c: 현제 클립보드에 저장된 이모티콘의 개수
+        e, c = curr[0], curr[1]
         
-        # 클립보드에 있는 모든 이모티콘을 화면에 붙여넣기하거나(2번 방법) 
-        # 현재 화면의 이모티콘에서 1개를 삭제(3번)
-        for next in [curr+visited[curr][1], curr-1]:
-            if 0 <= next < MAX_N:
-                if visited[next][0] == -1:
-                    visited[next][0] = visited[curr][0] + 1
-                    # 현재 클립보드에 저장된 이모티콘의 개수는 그대로 유지한다.
-                    visited[next][1] = visited[curr][1]
-                    q.append(next)
-                
-                elif visited[next][0] > visited[curr][0]+1:
-                    # 이걸 언제 해야할지 모르겠다.
-                    # 화면에 있는 이모티콘을 모두 복사해서 클립보드에 저장
-                    visited[curr][0] += 1
-                    visited[curr][1] = curr * 2
-                    q.append(next)
-
-                
+        # 모든 n(n>2)개의 이모티콘은 처음 1개 이모티콘에서 계속 복붙해서 2개,3개... 만들어 나갈 수 있기 때문
+        # 따라서 visited[e][k]는 항상 e개보다 작거나 같다는 것이 보장되므로, e보다 클 때 탐색하는 건 의미가 없다.
+        if e > 2 and visited[e][c] > e:
+            continue
+        
+        next_steps = [[e+c, c], 
+                      [e-1, c],
+                      [e, e]]
         for next in next_steps:
-            if 0 <= next < MAX_N:
-                if visited[next][0] == -1:
-                    # 시간이 1초 걸리고
-                    visited[next][0] = visited[curr][0] + 1
-                    # 클립
-                    visited[next][1] = visited[curr][1]
+            if 0 <= next[0] < MAX_N:
+                if visited[next[0]][next[1]] == -1 or \
+                    visited[next[0]][next[1]] > visited[e][c] + 1:
+                        
+                    visited[next[0]][next[1]] = visited[e][c] + 1
                     q.append(next)
-                    
-                    if next == N:
-                        return visited[next][0]
-                else:
-                    # save current emoticons on screen to clipboard
-                    # 현재 이모티콘(curr 개)을 클립보드에 저장
-                    visited[curr][1] = curr
-                    visited[curr][0] += 1
-            
+    
+    return min(i for i in visited[N] if i > -1)
 
-
-q = deque([1])
+q = deque([[1, 0]])
+print(bfs(q))
