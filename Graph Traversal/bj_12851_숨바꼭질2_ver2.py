@@ -15,6 +15,10 @@ def bfs(q):
         curr_loc = q.popleft()
         curr_depth = depths[curr_loc]
         
+        #REVIEW - 이 한 줄 추가로 굉장한 시간 단축을 노릴 수 있다?
+        if min_depth != 0 and curr_depth > min_depth:
+            continue
+        
         next_locs = [curr_loc-1, curr_loc+1, curr_loc*2]
         for next in next_locs:
             if 0 <= next and next < MAX_N:
