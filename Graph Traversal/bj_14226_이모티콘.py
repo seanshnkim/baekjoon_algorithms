@@ -1,13 +1,14 @@
 import sys
 from collections import deque
 
-MAX_N = 1001
+# MAX_N = 1001
 N = int(sys.stdin.readline())
 
 # e: 현재 화면에 있는 이모티콘의 개수
 # c: 현제 클립보드에 저장된 이모티콘의 개수
 # visited[e][c] = minimum count(depth)
-visited = [[-1]*MAX_N for _ in range(MAX_N)]
+visited = [[-1]*(N+1) for _ in range(N+1)]
+visited[1][0] = 0
 
 def bfs(q):
     while q:
@@ -25,14 +26,17 @@ def bfs(q):
                       [e-1, c],
                       [e, e]]
         for next in next_steps:
-            if 0 <= next[0] < MAX_N:
+            if 0 <= next[0] < N+1:
                 if visited[next[0]][next[1]] == -1:
                         
                     visited[next[0]][next[1]] = visited[e][c] + 1
                     q.append(next)
     
-    return
-    # return min(i for i in visited[N] if i > -1)
+    return min(i for i in visited[N] if i > -1)
 
 q = deque([[1, 0]])
 print(bfs(q))
+
+with open('wrong_result.txt', 'w') as f:
+    for n in range(N+1):
+        f.write(str(min(i for i in visited[n] if i > -1)) + '\n')
