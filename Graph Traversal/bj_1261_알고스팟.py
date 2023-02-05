@@ -35,7 +35,8 @@ def bfs(q):
                 elif cnts[r][c] == -1 and board[r][c] == 1:
                     q.append( (r, c) )
                     cnts[r][c] = cnts[curr[0]][curr[1]] + 1
-                    
+                
+                # bj_1261 wrong
                 if r == H-1 and c == W-1:
                     return cnts[r][c] 
                     
