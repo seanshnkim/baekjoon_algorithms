@@ -34,7 +34,9 @@ def rotate_counter_clockwise(num_rotate, board):
             r, c = row_start+1, col_start
         
         #FIXME - 에러의 원인: new_board 리스트에서 값의 업데이트가 그대로 board에도 적용된다.
-        board = new_board.copy()
+        # board = new_board.copy()
+        board = [row.copy() for row in new_board]
+        
 
     return new_board
 
