@@ -36,11 +36,11 @@ def bfs(q):
                     q.append( (r, c) )
                     cnts[r][c] = cnts[curr[0]][curr[1]] + 1
                 
-                # bj_1261 wrong
-                if r == H-1 and c == W-1:
-                    return cnts[r][c] 
-                    
-                    
+                #FIXME - 정말 check[N-1][N-1]을 출력하는게 정답일까?
+                # https://www.acmicpc.net/board/view/60443
+                # if r == H-1 and c == W-1:
+                #     return cnts[r][c] 
+    return cnts[H-1][W-1]
 
 # deque 생성할 때 항상 하는 실수:
 # deque([n]) -> 정수 n을 원소로 갖는 덱의 생성
