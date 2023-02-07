@@ -66,7 +66,7 @@ def calc6():
             board2[i-n//2][j] = board[i][j]
 
     return board2
-n,m,R = map(int,input().split())
+n,m,R = map(int, input().split())
 board = [list(map(int,input().split())) for _ in range(n)]
 orders = list(map(int,input().split()))
 
