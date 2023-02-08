@@ -2,7 +2,7 @@ import sys
 input = sys.stdin.readline
 
 
-def upper_bound(arr, targ):
+def find_lower_upper_bound(arr, targ):
     # NOTE - ans 값은 꼭 초기화해주어야 한다.
     # 배열에 targ 값이 없다면 바로 ans 값을 리턴해야 하기 때문 -> 
     # local variable referenced before assignment 에러 발생한다.
@@ -24,7 +24,7 @@ def upper_bound(arr, targ):
 
 # lower bound
 def lower_bound(arr, targ):
-    # ans = 0
+    ans = 0
     left, right = 0, len(arr)-1
     
     while left <= right :

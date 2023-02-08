@@ -8,7 +8,8 @@ input = sys.stdin.readline
 
 # upper bound
 def upper_bound(arr, targ):
-    left, right = arr[0], arr[-1]
+    left, right = 0, len(arr)-1
+    ans = -1
     
     while left <= right :
         mid = (left + right) // 2
@@ -25,7 +26,8 @@ def upper_bound(arr, targ):
 
 # lower bound
 def lower_bound(arr, targ):
-    left, right = arr[0], arr[-1]
+    left, right = 0, len(arr)-1
+    ans = -1
     
     while left <= right :
         mid = (left + right) // 2
@@ -39,5 +41,5 @@ def lower_bound(arr, targ):
             right = mid-1
         else:
             left = mid+1
-        
+    return ans
 # 5 5 5 5 6 6 6 7 7 7
