@@ -24,3 +24,15 @@ for i in range(1, N):
         prev = curr
 
 print(ans)
+
+'''
+반례:
+4
+5 10
+15 20
+25 30
+7 35
+
+output: 20
+answer: 30
+'''
