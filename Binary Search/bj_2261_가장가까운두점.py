@@ -3,7 +3,7 @@ input = sys.stdin.readline
 
 N = int(input())
 points = [tuple(map(int, input().split())) for _ in range(N)]
-points.sort(key=lambda x: x[0])
+points.sort()
 
 
 def dist_sqrd(pA, pB):
@@ -27,29 +27,24 @@ def solution(points, start, end):
     mid = (start + end) // 2
     
     # squared distance
-    #FIXME - d2 구할 때 mid+1부터 시작하면, points[mid]와 다른 점 사이 거리를 못 구한다.
+    #FIXME - d2 구할 때 mid+1부터 시작하면, points[mid]와 다른 점 사이 거리를 못 구한다.?
     d1 = solution(points, start, mid)
-    d2 = solution(points, mid, end)
+    d2 = solution(points, mid+1, end)
+    curr_dist = min(d1, d2)
     
-    d = min(d1, d2)
+    ans = curr_dist
     
-    return merge_find(d, start, end)
-    
-    
-
-def merge_find(dist, start, end):
-    mid = (start+end) // 2
-    ans = dist
-    # append points[mid] to to_search as well
+    #REVIEW - points[mid]를 미리 넣어놔야 하나? YES
     to_search = [points[mid]]
     # dist: squared distance
-    
-    for i in range(mid+1, len(points)):
+    # FIXME - 범위가 0, 또는 len(points)가 아니라 start-1, end+1까지다
+    # for i in range(mid+1, len(points)):
+    for i in range(mid+1, end+1):
         x_diff = points[i][0] - points[mid][0]
         if x_diff*x_diff < ans:
             to_search.append(points[i])
             break
-    for i in range(mid-1, -1, -1):
+    for i in range(mid-1, start-1, -1):
         x_diff = points[mid][0] - points[i][0]
         if x_diff*x_diff < ans:
             to_search.append(points[i])
@@ -61,7 +56,7 @@ def merge_find(dist, start, end):
     for i in range(len(to_search)-1):
         for j in range(i+1, len(to_search)):
             y_diff = to_search[j][1] - to_search[i][1]
-            if y_diff*y_diff >= dist:
+            if y_diff*y_diff >= ans:
                 break
             else:
                 curr_dist_sqrd = dist_sqrd(to_search[j], to_search[i])
@@ -69,4 +64,5 @@ def merge_find(dist, start, end):
     
     return ans
 
-print(solution(points, 0, len(points)-1))
+
+print(solution(points, 0, N-1))
