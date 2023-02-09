@@ -21,6 +21,7 @@ def digits(n):
 
 
 def solution(targ, left, right):
+    
     mid = (left+right) // 2
     
     while left <= right:
@@ -38,4 +39,7 @@ def solution(targ, left, right):
     return str(curr)[steps-1]
 
 
-print(solution(K, 1, N))
+if digits(N) < K:
+    print(-1)
+else:
+    print(solution(K, 1, N))
