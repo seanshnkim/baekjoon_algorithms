@@ -18,9 +18,13 @@ def solution(targ_num, left, right):
     
     while left <= right:
         if how_many(mid) > targ_num:
-            solution(targ_num, left, mid-1)
+            #FIXME - 거꾸로! -> 몫을 구하는 연산이기 때문에,
+            # 현재 값이 targ_num보다 크다는 건 그만큼 길이(나눠주는 길이)가 작다는 것
+            # solution(targ_num, left, mid-1)
+            return solution(targ_num, mid+1, right)
         elif how_many(mid) < targ_num:
-            solution(targ_num, mid+1, right)
+            # solution(targ_num, mid+1, right)
+            return solution(targ_num, left, mid-1)
         else:
             return mid
     return mid
