@@ -12,7 +12,8 @@ def solution(points, start, end):
             return (points[end][0] - points[start][0])**2 + \
                     (points[end][1] - points[start][1])**2
         elif (end - start) == 2:
-            mid = (end - start) // 2
+            # FIXME mid = (end - start) // 2 이런 바보같은 실수!
+            mid = (end + start) // 2
             dist1 = (points[end][0] - points[mid][0])**2 + \
                     (points[end][1] - points[mid][1])**2
             dist2 = (points[mid][0] - points[start][0])**2 + \
@@ -24,7 +25,7 @@ def solution(points, start, end):
     # squared distance
     #FIXME - d2 구할 때 mid+1부터 시작하면, points[mid]와 다른 점 사이 거리를 못 구한다.
     d1 = solution(points, start, mid)
-    d2 = solution(points, mid+1, end)
+    d2 = solution(points, mid, end)
     
     d = min(d1, d2)
     
@@ -60,7 +61,7 @@ def merge_find(dist, start, end):
                 curr_dist = (to_search[j][0] - to_search[i][0])**2 + \
                             (to_search[j][1] - to_search[i][1])**2
                 
-                ans = min(curr_dist, dist)
+                ans = min(curr_dist, ans)
     
     return ans
 
