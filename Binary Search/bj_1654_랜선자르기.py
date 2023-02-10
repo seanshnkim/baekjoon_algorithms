@@ -7,6 +7,8 @@ nums.sort()
 
 
 def how_many(l):
+    if l == 0:
+        return 
     cnt = 0
     for n in nums:
         cnt += (n // l)
@@ -34,5 +36,7 @@ def solution(targ_num, left, right):
 
 # WRONG
 # print(solution(0, N-1))
-min_len, max_len = 0, nums[-1]
+#FIXME - zero division error -> min_len를 0으로 설정하면 오류 발생!
+# min_len, max_len = 0, nums[-1]
+min_len, max_len = 1, nums[-1]
 print(solution(n_targ, min_len, max_len))
