@@ -17,7 +17,9 @@ else:
         if input_str[i] == explode[0]:
             stack.append(0)
             
-        elif stack and input_str[i-1] == explode[stack[-1]] \
+        # FIXME: input_str[i-1]이 아니라 output_str -> 문제 사전 분석이 그래서 중요하다
+        # elif stack and input_str[i-1] == explode[stack[-1]] \
+        elif stack and input_str[output_idx[-1]] == explode[stack[-1]] \
             and input_str[i] == explode[stack[-1]+1]:
             stack.append(stack[-1]+1)
             
