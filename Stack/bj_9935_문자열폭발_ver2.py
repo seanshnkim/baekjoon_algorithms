@@ -30,8 +30,8 @@ else:
         elif is_consecutive(output_str, stack, curr):
             stack += curr
             if curr == explode[-1]:
-                stack = stack[:(len(stack) - len_exp)]
-                output_str = output_str[:(len(output_str) - len_exp) ]
+                stack = stack[:-len_exp]
+                output_str = output_str[:-len_exp]
     
     if not output_str:
         print("FRULA")

@@ -5,12 +5,10 @@ from collections import namedtuple
 
 Edge = namedtuple("Edge", ["v", "w"])
 
-
-
 V, E = map(int, input().split())
-adj_list = [[]*(V+1) for _ in range(V+1)]
+# adj_list = [[]*(V+1) for _ in range(V+1)]
+adj_list = [[] for _ in range(V+1)]
 
-visited = [False]*(V+1)
 w_max = 1
 w_min = 1000000000
 
@@ -27,8 +25,9 @@ start, dest = map(int, input().split())
 visited = [False]*(V+1)
 
 
-def solution(visited, left, right):
+def solution(left, right):
     # mid = (left + right) // 2
+    global visited
     
     while left <= right:
         mid = (left + right) // 2
@@ -44,7 +43,7 @@ def solution(visited, left, right):
 
                     if adj_v.v == dest:
                         visited = [False]*(V+1)
-                        return solution(visited, mid+1, right)
+                        return solution(mid+1, right)
         right = mid-1
         #FIXME - left, right 초기화했다면 그래프를 처음부터 다시 
         # 새로운 중량 값(mid)으로 탐색하는 것이므로 visited도 초기화해주어야 함
@@ -55,4 +54,5 @@ def solution(visited, left, right):
     # return mid
     return (left+right) // 2
 
-print(solution(visited, w_min, w_max))
+
+print(solution(w_min, w_max))
