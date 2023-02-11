@@ -28,6 +28,7 @@ else:
                         for _ in range(len_exp):
                             f = stack.pop()
                             erased[f[0]] = True
+                            
                 # else:
                 #     while stack:
                 #         stack.pop()

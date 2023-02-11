@@ -21,7 +21,7 @@ else:
         # if curr == explode[0]:
         if curr == explode[0]:
             stack.append((curr, 0) )
-        elif is_consecutive(output, stack, curr):
+        elif stack:
             stack.append((curr, stack[-1][1]+1) )
             #FIXME - 반례: input_str이 ababab, explode 문자열이 'abab'인 경우
             #REVIEW - 폭발 문자열은 같은 문자를 두 개 이상 포함하지 않는다.
