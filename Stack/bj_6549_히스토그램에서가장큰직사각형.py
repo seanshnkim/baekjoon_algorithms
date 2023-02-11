@@ -8,14 +8,18 @@ while True:
         break
     N, *heights = inputs
     
-    max_area = 0
+    # FIXME - i=0일 때에도 max_area 업데이트는 해주어야 한다.
+    # max_area = 0
+    max_area = heights[0]
     stack = []
     for i in range(N):
         if i == 0:
             stack.append(i)
             continue
+        
         if heights[i] >= heights[i-1]:
             stack.append(i)
+            
         else:
             while stack and heights[stack[-1]] > heights[i]:
                 curr = stack.pop()
@@ -26,7 +30,9 @@ while True:
                     # left = 0
                     left = -1
                 right = i
-                max_area = max(max_area, curr*(right-left-1))
+                # FIXME - curr이 아니라 heights[curr] -> 이런 실수 반복하면 안된다
+                # max_area = max(max_area, curr*(right-left-1))
+                max_area = max(max_area, heights[curr]*(right-left-1))
                 
             stack.append(i)
     
