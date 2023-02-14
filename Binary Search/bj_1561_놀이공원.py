@@ -36,7 +36,9 @@ def get_order(curr_t, curr_cnt, targ_cnt):
 
 left = min(times) * (n_people // n_trains)
 right = max(times) * (n_people // n_trains)
-answer = n_people
+#FIXME - 반례: N = 3인데, M = 1일 경우?
+# answer = n_people
+answer = n_people % n_trains
 
 while left <= right:
     # mid = 가능한 운행시간 -> 우선 이분 탐색(매개변수 탐색)으로 운행시간을 찾고,
@@ -75,5 +77,11 @@ print(answer)
 3 1
 4
 output: 3
+answer: 1
+
+반례 2:
+2000000000 1
+30
+output: 0
 answer: 1
 '''
