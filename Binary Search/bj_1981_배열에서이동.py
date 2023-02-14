@@ -65,7 +65,8 @@ while left <= right:
     else:
         right = mid-1
 
-print(left)
+# 최솟값을 구하는 문제이기 때문에 
+# print(left)
 
 # 이 코드의 반례:
 '''
