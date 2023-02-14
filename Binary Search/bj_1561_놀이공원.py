@@ -37,40 +37,33 @@ def get_order(curr_t, curr_cnt, targ_cnt):
 left = min(times) * (n_people // n_trains)
 right = max(times) * (n_people // n_trains)
 #FIXME - 반례: N = 3인데, M = 1일 경우?
-# answer = n_people
-answer = n_people % n_trains
-
-while left <= right:
-    # mid = 가능한 운행시간 -> 우선 이분 탐색(매개변수 탐색)으로 운행시간을 찾고,
-    # 해당 운행시간 안에 태울 수 있는 사람 수(cnt)가 n_people보다 크거나 같다면 운행시간(mid)을 줄이고,
-    # 해당 운행시간 안에 태울 수 있는 사람 수(cnt)가 n_people-M보다 작다면 운행시간을 늘린다.
-    # cnt가 n_people-M 이상 n_people 이하이면 해당 운행시간 안에 답을 구한다.
-    # 그래서 찾고자 하는 운행시간은 cnt 값이 n_people-M 이상 n_people 이하인 운행시간
-    mid = (left+right) // 2
-    
-    curr_n_people = get_cnts(mid)
-    # if curr_n_people >= n_people:
-    if curr_n_people >= n_people:
-        right = mid-1
-    elif curr_n_people < n_people - n_trains:
-        left = mid+1
-    else:
-        answer = get_order(mid, curr_n_people, n_people)
-        break
-        # while curr_n_people <= n_people:
-        #     if curr_n_people == n_people:
-        #         curr_t = mid-1
-        #         curr_n_people = get_cnts(curr_t)
-        #     else:
-        #         curr_t = mid
-        #     for i in range(n_trains):
-        #         if curr_t % times[i] == 0:
-        #             curr_n_people += 1
-        #         if curr_n_people == n_people:
-        #             answer = i+1
-        #             break
-                
-print(answer)
+# answer = n_people 
+if n_trains == 1:
+    print(1)
+#FIXME - elif n_people -> 같을 때도
+# elif n_people < n_trains:
+elif n_people <= n_trains:
+    print(n_people)
+else:
+    answer = 0
+    while left <= right:
+        # mid = 가능한 운행시간 -> 우선 이분 탐색(매개변수 탐색)으로 운행시간을 찾고,
+        # 해당 운행시간 안에 태울 수 있는 사람 수(cnt)가 n_people보다 크거나 같다면 운행시간(mid)을 줄이고,
+        # 해당 운행시간 안에 태울 수 있는 사람 수(cnt)가 n_people-M보다 작다면 운행시간을 늘린다.
+        # cnt가 n_people-M 이상 n_people 이하이면 해당 운행시간 안에 답을 구한다.
+        # 그래서 찾고자 하는 운행시간은 cnt 값이 n_people-M 이상 n_people 이하인 운행시간
+        mid = (left+right) // 2
+        
+        curr_n_people = get_cnts(mid)
+        # if curr_n_people >= n_people:
+        if curr_n_people >= n_people:
+            right = mid-1
+        elif curr_n_people < n_people - n_trains:
+            left = mid+1
+        else:
+            answer = get_order(mid, curr_n_people, n_people)
+            break
+    print(answer)
 
 '''
 반례:

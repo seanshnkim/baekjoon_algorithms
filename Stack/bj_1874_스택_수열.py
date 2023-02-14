@@ -1,40 +1,33 @@
+# 왜 이 문제를 이렇게 헤맸을까?
+
 import sys
 input = sys.stdin.readline
 
 N = int(input())
-output = [int(input().rstrip('\n')) for _ in range(N)]
+printed_nums = [int(input().rstrip('\n')) for _ in range(N)]
 
-i = N-1
 stack = []
-ans = []
-latest = N+1
-while i >= 0:
-    if i == N-1:
-        stack.append(output[i])
-        ans.append('-')
-        i -= 1
-        continue
-    while stack and output[i] > stack[-1]:
-        stack.append(output[i])
-        ans.append('-')
-        i -= 1
-    if i < 0:
-        break
-    # if output[i] < stack[-1]이 포함
-    while stack and output[i] < stack[-1]:
-        curr = stack.pop()
-        if curr > latest:
-            print("NO")
-            sys.exit(0)
-        
-        latest = min(latest, curr)
-        ans.append('+')
-        
-    stack.append(output[i])
-    i -= 1
+answer = []
+is_stack_sequence = True
 
-while stack:
-    ans.append('+')
-    stack.pop()
+top = 0
+for i in range(N):
+    curr_num = printed_nums[i]
+    if curr_num > top:
+        for i in range(top+1, curr_num+1):
+            stack.append(i)
+            answer.append('+')
+        top = curr_num
     
-print(*ans[::-1], sep='\n')
+    popped = stack.pop()
+    answer.append('-')
+    
+    if popped != curr_num:
+        is_stack_sequence = False
+        break
+
+
+if not is_stack_sequence:
+    print("NO")
+else:
+    print(*answer, sep='\n')
