@@ -14,15 +14,6 @@ targ, dest = map(int, input().split())
 
 # 먼저 삽입된 더 먼 경로의 정점은 탐색을 시작하지 않아야 합니다
 # https://www.acmicpc.net/board/view/71228
-# for i in range(1, V+1):
-#     tmp_adj_nodes = {}
-#     for e in adj_list[i]:
-#         if e.node not in tmp_adj_nodes:
-#             tmp_adj_nodes[e.node] = e.weight
-#         else:
-#             if e.weight < tmp_adj_nodes[e.node]:
-#                 tmp_adj_nodes[e.node] = e.weight
-#     adj_list[i] = [Edge(node=n, weight=w) for n,w in tmp_adj_nodes.items()]
 
 
 def dijkstra(adj_list, start):
@@ -34,8 +25,11 @@ def dijkstra(adj_list, start):
     visited = [False for _ in range(V+1)]
     
     while pq:
+        # 같은 두 노드 사이 간선이 여러 개 있을 수도 있다.
+        # min heap이기 때문에 제일 작은 경로를 처음에 반환
         d, curr_node = heapq.heappop(pq)
         
+        # 그 이후로 가중치가 더 큰 간선을 반환하나, 가장 처음에 dist[curr_node]가 가장 작은 값으로 업데이트되었기 때문에 continue
         if visited[curr_node] or dist[curr_node] < d:
             continue
         
@@ -54,6 +48,7 @@ def dijkstra(adj_list, start):
                 # 0번째 원소를 기준으로 정렬하기 때문.
                 # FIXME - w를 삽입하는 게 아니라, new_distance를
                 # heapq.heappush(pq, (w, adj_node) )
+                
     
     return dist
 
