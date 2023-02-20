@@ -6,7 +6,7 @@ Conf_time = namedtuple("conf_time", ["start", "end"])
 N = int(input())
 times = [Conf_time(*map(int, input().split())) for _ in range(N)]
 
-times.sort(key=lambda x: x.end)
+times.sort(key=lambda x: (x.end, x.start) )
 
 cnt = 1
 curr_end = times[0].end
