@@ -17,14 +17,11 @@ for j in jewels:
     if j.weight > bags[-1]:
         continue
     
-    curr_idx = bisect.bisect_right(bags, j.weight)
+    # bisect의 원리를 몰라서 틀림 -> 같아도 bisect_right는 같은 원소들 맨 오른쪽에 배치
+    # curr_idx = bisect.bisect_right(bags, j.weight)
+    curr_idx = bisect.bisect_left(bags, j.weight)
     if bags:
         answer += j.price
-        if curr_idx == 0:
-            bags.pop(curr_idx)
-        else:
-            bags.pop(curr_idx-1)
-    else:
-        break
+        bags.pop(curr_idx)
 
 print(answer)
