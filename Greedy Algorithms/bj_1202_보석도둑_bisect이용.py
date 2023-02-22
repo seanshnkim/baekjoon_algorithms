@@ -1,9 +1,7 @@
 import sys
 input = sys.stdin.readline
 from collections import namedtuple
-import bisect
 import heapq
-
 Jewel = namedtuple("Jewel", ["weight", "price"])
 
 N_jewels, N_bags = map(int, input().split())
@@ -22,14 +20,19 @@ for bag in bags:
     if bag < jewels[0].weight:
         continue
     
-    while jewels:
-        upper_limit_j = bisect.bisect_right(jewels, (bag, 0))
-        max_val = 0
-        for i in range(upper_limit_j):
-            curr_jewel = heapq.heappop(jewels)
-            max_val = max(max_val, curr_jewel.price)
-        
-        answer += max_val
+    while jewels and bag >= jewels[0].weight:
+        heapq.heappush(curr_jewels, (-1)*heapq.heappop(jewels).price)
+    
+    if curr_jewels:
+        answer += (-1)*heapq.heappop(curr_jewels)
+    elif not jewels:
+        break
+    # while jewels and bag >= jewels[0].weight:
+    #     heapq.heappush(curr_jewels, (-1)*heapq.heappop(jewels).price)
+    # if curr_jewels:
+    #     answer += (-1)*heapq.heappop(curr_jewels)
+    # elif not jewels:
+    #     break
 
 print(answer)
 
