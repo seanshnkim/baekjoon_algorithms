@@ -16,7 +16,13 @@ min_result = 10**9
 curr_permutations = permutations(idx_operators)
 checked = []
 
+permut_set = set()
 for permut in curr_permutations:
+    if permut in permut_set:
+        continue
+    else:
+        permut_set.add(permut)
+        
     res = nums[0]
     for n in range(1, N):
         if permut[n-1] == 0:
