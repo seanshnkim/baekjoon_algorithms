@@ -48,7 +48,8 @@ for _ in range(N_testcase):
         # 같은 집합에 있는 노드를 또 merge하면 cnt가 기하급수적으로 늘어나서
         # 출력 초과가 발생한다.
         # if parent[start_ID] != parent[end_ID]:
-        merge(start_ID, end_ID)
+        if find(start_ID) != find(end_ID):
+            merge(start_ID, end_ID)
         
         # print(counts[parent[end_ID]])
         print(counts[find(end_ID)])
