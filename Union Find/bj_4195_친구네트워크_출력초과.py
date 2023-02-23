@@ -18,10 +18,13 @@ def merge(x, y):
     
     if rank[x_root] > rank[y_root]:
         parent[y_root] = x_root
-        counts[x_root] += 1
+        # counts[x_root] += 1
+        counts[x_root] += counts[y_root]
     else:
         parent[x_root] = y_root
-        counts[y_root] += 1
+        # counts[y_root] += 1
+        counts[y_root] += counts[x_root]
+        
     if rank[x_root] == rank[y_root]:
         rank[y_root] += 1
 
@@ -44,5 +47,3 @@ for _ in range(N_testcase):
         merge(start_ID, end_ID)
         
         print(counts[parent[end_ID]])
-        
-        
