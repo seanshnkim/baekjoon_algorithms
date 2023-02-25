@@ -10,18 +10,18 @@ for _ in range(E):
     start, end, w = map(int, input().split())
     adj_list[start].append((end, w))
 
-targ, dest = map(int, input().split())
+depart, dest = map(int, input().split())
 
 # 먼저 삽입된 더 먼 경로의 정점은 탐색을 시작하지 않아야 합니다
 # https://www.acmicpc.net/board/view/71228
 
 
-def dijkstra(adj_list, start):
+def dijkstra(adj_list, depart_node, dest_node):
     # dist = {node: float('inf') for node in adj_list}
     dist = [float('inf') for _ in range(V+1)]
-    dist[start] = 0
+    dist[depart_node] = 0
     
-    pq = [(0, start)]
+    pq = [(0, depart_node)]
     visited = [False for _ in range(V+1)]
     
     while pq:
@@ -48,9 +48,8 @@ def dijkstra(adj_list, start):
                 # 0번째 원소를 기준으로 정렬하기 때문.
                 # FIXME - w를 삽입하는 게 아니라, new_distance를
                 # heapq.heappush(pq, (w, adj_node) )
+                heapq.heappush(pq, (new_dist, adj_node) )
                 
-    
-    return dist
+    return dist[dest_node]
 
-dist_info = dijkstra(adj_list, targ)
-print(dist_info[dest])
+print(dijkstra(adj_list, depart, dest))
