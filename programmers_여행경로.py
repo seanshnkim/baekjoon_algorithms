@@ -42,4 +42,7 @@ tickets1 = [["ICN", "JFK"],
            ["HND", "IAD"],
            ["JFK", "HND"]
            ]
-solution(tickets)
+solution(tickets1)
+
+# 이 문제는 BFS와 살짝 다른 게, 한번 노드를 이미 방문했다고 다시 방문 못하는 게 아니라
+# 모든 노드를 순회한 후에야 종료되는 것이기 때문에 두 번이상도 방문할 수 있다.
