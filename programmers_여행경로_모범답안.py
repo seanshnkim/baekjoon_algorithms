@@ -29,4 +29,6 @@ def solution(tickets):
             stack.append(graph[top].pop())
 
     # 5. path를 뒤집어서 반환
+    # deque을 써서 appendleft 했다면 마지막에 path[::-1] 복사본을 따로 만들 필요가 없지 않았을까?
     return path[::-1]
+
