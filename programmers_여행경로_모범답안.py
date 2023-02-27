@@ -1,3 +1,5 @@
+# 출처: https://school.programmers.co.kr/app/courses/16202/code-reviews/33158
+
 from collections import defaultdict
 def solution(tickets):
     path = []
