@@ -22,6 +22,9 @@ def bfs(coin_pos1, coin_pos2):
         cur_x1, cur_y1 = coin1
         cur_x2, cur_y2 = coin2
         
+        if cur_cnt == 10:
+            return -1
+        
         cnt = cur_cnt + 1
         for i in range(4):
             mx1, my1 = cur_x1+dx[i], cur_y1+dy[i]
@@ -45,8 +48,8 @@ def bfs(coin_pos1, coin_pos2):
                 return cnt
         
         # FIXME - 이 부분 때문에 틀렸다. 아직 q에서 cnt == 9인 원소 다 탐색하지도 않았는데 cnt에 1 더해서 10 되면 종료시키기 때문이다.
-        if cnt == 10:
-            return -1
+        # if cnt == 10:
+        #     return -1
     
     return cnt
 
