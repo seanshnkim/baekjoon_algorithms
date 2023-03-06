@@ -26,8 +26,9 @@ def update_row(curr_row, vertical_dist, available_archer_pos):
             # 왼쪽 먼저 탐색해야 함
             moved = arc-move
             if moved >= 0 and curr_row[moved] == 1:
-                # FIXME - 이렇게 해도 더 많은 궁수가 낭비될 수 있다. 
-                # 한 적이 두명 이상의 궁수에게 공격당하면 한 명의 궁수만 사용해야지, 지금은 여러 명의 궁수가 사용되고 있다.
+                # FIXME - 각 궁수는 먼저 가장 가까운 적부터 없애야 하는데,
+                # 각 궁수마다 거리에 상관없이 최대한 많은 적을 잡고 그 다음 궁수를 순회하기 때문에
+                # 오류가 발생하고 있다.
                 left_archers.remove(arc)
                 killed_enemies.add(moved)
                 # curr_row[moved] = 0
