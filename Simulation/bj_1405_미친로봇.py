@@ -27,5 +27,6 @@ while q:
         mx, my = x+dx[i], y+dy[i]
         if not visited[mx][my]:
             q.append( (mx, my, cnt+1, prob*probs[i]) )
+            visited[mx][my] = True
 
 print(answer)
