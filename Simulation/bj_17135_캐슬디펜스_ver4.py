@@ -7,6 +7,7 @@ board = [ list(map(int, input().split()) ) for _ in range(H) ]
 cnt_enemies = sum(sum(row) for row in board)
 
 
+
 def kill_by_turn(cur_board, start_row, arc_pos):
     left_archers = set(arc_pos)
     killed_enemies = set()
@@ -40,7 +41,7 @@ for archers_y in combinations(range(W), 3):
     tmp_board = [row.copy() for row in board]
     cnt_killed = 0
     for turn in range(H):
-        enemies = kill_by_turn(tmp_board, H-1-turn, archers_y)
+        enemies = kill_by_turn(tmp_board, H-1-turn, archers_y)        
         cnt_killed += len(enemies)
         
         for enemy in enemies:
