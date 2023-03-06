@@ -10,6 +10,7 @@ cnt_enemies = sum(sum(row) for row in board)
 # return: curr_row, available_arch_pos both updated
 def update_row(curr_row, vertical_dist, available_archer_pos):
     left_archers = set(available_archer_pos)
+    killed_enemies = set()
     
     for arc in available_archer_pos:
         # 문제 조건:
@@ -20,22 +21,27 @@ def update_row(curr_row, vertical_dist, available_archer_pos):
         ############
         # move : arc(궁수 y 좌표)를 기준으로 (양방향으로) 움직이는 칸 수
         for move in range(W):
-            if (vertical_dist + move > D) or len(left_archers) == 0:
+            if (vertical_dist + move > D):
                 break
             # 왼쪽 먼저 탐색해야 함
             moved = arc-move
             if moved >= 0 and curr_row[moved] == 1:
+                # FIXME - 이렇게 해도 더 많은 궁수가 낭비될 수 있다. 
+                # 한 적이 두명 이상의 궁수에게 공격당하면 한 명의 궁수만 사용해야지, 지금은 여러 명의 궁수가 사용되고 있다.
                 left_archers.remove(arc)
-                curr_row[moved] = 0
+                killed_enemies.add(moved)
+                # curr_row[moved] = 0
                 # 궁수 사용했으니까 for loop break
                 break
             # 오른쪽
             moved = arc+move
             if moved < W and curr_row[moved] == 1:
                 left_archers.remove(arc)
-                curr_row[moved] = 0
-                # 궁수 사용했으니까 for loop break
+                killed_enemies.add(moved)
                 break
+    
+    for enemy in list(killed_enemies):
+        curr_row[enemy] = 0
     
     return curr_row, list(left_archers)
 
