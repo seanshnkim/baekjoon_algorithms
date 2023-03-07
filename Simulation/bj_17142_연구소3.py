@@ -21,6 +21,7 @@ def in_board(x, y):
 
 def proliferate(board, activated_virus):
     cur_activated = []
+    cnt_no_empty = 0
     for virus in activated_virus:
         x, y = virus
         
@@ -28,25 +29,24 @@ def proliferate(board, activated_virus):
             mx, my = x+dx[i], y+dy[i]
             if in_board(mx, my):
                 if board[mx][my] == 0 or board[mx][my] == 2:
-                    # 활성 상태의 바이러스가 빈칸에 복제되면 활성상태의 바이러스가 되는 거 맞나?
+                    if board[mx][my] == 0:
+                        cnt_no_empty += 1
                     board[mx][my] = 3
                     cur_activated.append((mx, my))
-                    # 여기서 다시 board[mx][my] == 0을 해주어야 할까?
     
-    activated_virus.extend(cur_activated)
-    return activated_virus
+    return cur_activated, cnt_no_empty
 
 
-def empty_cells(board):
-    cnt = 0
-    for r in range(N):
-        for c in range(N):
-            if board[r][c] == 0:
-                cnt += 1
-    return cnt
+# def count_empty(board):
+#     cnt = 0
+#     for r in range(N):
+#         for c in range(N):
+#             if board[r][c] == 0:
+#                 cnt += 1
+#     return cnt
     
 
-answer = 0
+answers = []
 for comb in combinations(virus_loc, n_virus):
     # 활성이면 2에서 1을 더해서 3으로 표시하기로 하자(따라서, 여전히 비활성이면 2이다).
     tmp_board = [row.copy() for row in board]
@@ -65,20 +65,27 @@ for comb in combinations(virus_loc, n_virus):
     
     act_virus = list(comb)
     while cnt_empty > 0:
-        new_act = proliferate(tmp_board, act_virus)
-        cur_empty = empty_cells(tmp_board)
+        new_act, cnt_no_empty = proliferate(tmp_board, act_virus)
+        cnt_empty -= cnt_no_empty
         # 즉 이전 cnt와 현재 cnt가 같고, 빈칸이 줄어들지 않는다는 건 더 이상 바이러스를 퍼뜨릴 수 없다는 뜻
-        if cnt_empty == cur_empty:
-            answer = -1
-            break
-        else:
-            cnt_empty = cur_empty
-            act_virus = new_act
+        # 더 이상 증식할 수 없다면(activated_cell 개수가 증가X) 멈추는 걸로 판정하자.
+        # if cnt_empty == cur_empty:
+        if new_act:
+            act_virus.extend(new_act)
             cnt_time += 1
+        else:
+            cnt_time = -1
+            break
     
-    if answer == -1:
-        break
-    elif answer == 0 or answer > cnt_time:
-        answer = cnt_time
+    # FIXME - 그리고 수많은 조합 경우의 수 중에 도달할 수 없는 경우도 있고, 도달할 수 있는 경우도 있을 것
+    answers.append(cnt_time)
 
-print(answer)
+# cur_ans = answers[0]
+# for ans in answers:
+#     if (cur_ans == -1 and ans != -1) or ans < cur_ans:
+#         cur_ans = ans
+valid_answers = [ans for ans in answers if ans != - 1]
+if valid_answers:
+    print(min(valid_answers))
+else:
+    print(-1)
