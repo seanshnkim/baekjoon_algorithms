@@ -13,17 +13,8 @@ def is_attackable(loc1, loc2):
 # 비둘기 집의 원리에 의해 각 행마다 하나씩 배치할 수밖에 없다.
 def solution(cur_row, prev_loc):
     cnt = 0
-    
-    if cur_row == N-2:
-        for y in range(N):
-            is_attacked = False
-            for loc in prev_loc:
-                if is_attackable((cur_row+1, y), loc):
-                    is_attacked = True
-                    break
-            if not is_attacked:
-                cnt += 1
-        return cnt
+    if cur_row == N-1:
+        return 1
     
     else:
         for y in range(N):
