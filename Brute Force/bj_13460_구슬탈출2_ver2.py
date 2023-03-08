@@ -2,11 +2,10 @@ import sys
 input = sys.stdin.readline
 
 H, W = map(int, input().split())
-board = [['']*W for _ in range(H)]
+board = []
 for r in range(H):
     row = input().rstrip('\n')
-    for c in range(W):
-        board[r][c] = row[c]
+    board.append(list(s for s in row))
 
 
 # 동, 서, 남, 북
