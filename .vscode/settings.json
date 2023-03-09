@@ -26,5 +26,6 @@
         "editor.suggest.showStructs": false,
         "editor.suggest.showTypeParameters": false,
         "editor.suggest.showUsers": false
-    }
+    },
+    "editor.suggest.selectionMode": "never"
 }
