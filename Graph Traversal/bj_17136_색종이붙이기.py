@@ -72,23 +72,25 @@ def solution(start_x, start_y, cnt):
         
         # 항상 채워야 할(아직 1인) 칸만 solution 함수에 입력해야 함
         res = solution(next_pos[0], next_pos[1], cnt+1)
-        # 현재 width 이하로는 유효하지 않다는 뜻
-        if res == -1:
-            cnt_left[width] += 1
-            uncover(start_x, start_y, width)
-            # FIXME - width == max_width 이었다고 해서 바로 -1 불가능하다고 판단하면 안된다.
-            # if width == max_width:
-            #     return -1
-            width -= 1
-            continue
-
-        # 현재까지의 cnt : cnt, 앞으로의 cnt : res(res는 여기서 -1이 아닌 유효한 값인 경우만)
-        if cur_cnt == -1 or cur_cnt > res:
-            cur_cnt = res
+        
         # 재귀함수니까 다시 visited 해제해주어야 함
         cnt_left[width] += 1
         uncover(start_x, start_y, width)
         width -= 1
+        
+        # 현재 width 이하로는 유효하지 않다는 뜻
+        if res == -1:
+            # FIXME - width == max_width 이었다고 해서 바로 -1 불가능하다고 판단하면 안된다.
+            # if width == max_width:
+            #     return -1
+            continue
+        
+        # 현재까지의 cnt : cnt, 앞으로의 cnt : res(res는 여기서 -1이 아닌 유효한 값인 경우만)
+        if cur_cnt == -1 or cur_cnt > res:
+            cur_cnt = res
+        elif cur_cnt <= res:
+            break
+        
     
     return cur_cnt
 
