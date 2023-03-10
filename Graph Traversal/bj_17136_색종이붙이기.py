@@ -15,7 +15,7 @@ cnt_left = [0, 5, 5, 5, 5, 5]
 def find_largest_square(x, y):
     max_width = 1
     # max_width가 5가 넘으면 안된다.
-    while x+max_width < BSIZE and y+max_width < BSIZE and max_width <= 5:
+    while x+max_width <= BSIZE and y+max_width <= BSIZE and max_width <= 5:
         for r in range(max_width):
             for c in range(max_width):
                 if board[x+r][y+c] != 1:
