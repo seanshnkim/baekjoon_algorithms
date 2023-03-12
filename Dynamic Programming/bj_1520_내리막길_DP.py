@@ -1,5 +1,6 @@
 import sys
 input = sys.stdin.readline
+from collections import deque
 
 H, W = map(int, input().split())
 board = [list(map(int, input().split())) for _ in range(H)]
@@ -11,18 +12,23 @@ visited = [[False]*W for _ in range(H)]
 dp = [[-1]*W for _ in range(H)]
 dp[0][0] = 1
 
-for x in range(H):
-    for y in range(W):
-        if dp[x][y] == -1:
-            continue
-        for i in range(4):
-            mx, my = x+dx[i], y+dy[i]
-            if (0 <= mx < H and 0 <= my < W) and board[mx][my] < board[x][y]:
-                if dp[mx][my] == -1:
-                    dp[mx][my] = dp[x][y]
-                else:
-                    dp[mx][my] += dp[x][y]
-
+q = deque([(0,0)])
+while q:
+    x, y = q.popleft()
+    # q에는 같은 위치의 칸이 여러 개 중복해서 들어가 있을 수 있다. 이미 방문 처리한 것이라면 그냥 건너뛰도록 처리한다.
+    if visited[x][y]:
+        continue
+    visited[x][y] = True
+    
+    for i in range(4):
+        mx, my = x+dx[i], y+dy[i]
+        if (0 <= mx < H and 0 <= my < W) and board[mx][my] < board[x][y] and not visited[mx][my]:
+            if dp[mx][my] == -1:
+                dp[mx][my] = dp[x][y]
+            else:
+                dp[mx][my] += dp[x][y]
+            
+            q.append((mx, my))
 
 answer = dp[H-1][W-1]
 if answer == -1:
