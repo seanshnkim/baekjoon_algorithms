@@ -75,6 +75,8 @@ def solution(red_loc, blue_loc, visited, cnt):
                     update_board('B', moved_blue_loc, blue_loc)
                     continue
                 visited.add((moved_red_loc, moved_blue_loc))
+                # NOTE - R에 대해서도 update_board 해줘야 하는데 안했다.
+                update_board('R', red_loc, moved_red_loc)
                 tmp = solution(moved_red_loc, moved_blue_loc, visited, cnt+1)
                 # 그리고 다시 visited를 해제, 이동을 다시 원래 위치로
                 visited.remove((moved_red_loc, moved_blue_loc))
@@ -133,16 +135,18 @@ visited.add((red_loc, blue_loc))
 print(solution(red_loc, blue_loc, visited, 0))
 
 '''
-반례: https://www.acmicpc.net/board/view/110513
-10 7
-#######
-#.....#
-#.B...#
-#R....#
-#.....#
-#.....#
-#...O.#
-#.....#
-#.....#
-#######
+반례:
+10 10
+##########
+#RB....#.#
+#..#.....#
+#........#
+#.O......#
+#...#....#
+#........#
+#........#
+#.......##
+##########
+정답: 10
+출력: -1
 '''

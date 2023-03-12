@@ -3,7 +3,7 @@ input = sys.stdin.readline
 BSIZE = 10
 board = [list(map(int, input().split())) for _ in range(BSIZE)]
 # visited[x][y] == 1이면 채워야 하는 칸, == 0이면 채우면 안되는 칸
-# visited[x][y] == 1이었고 방문했다면 2로 변경하기로 하자.
+# visited[x][y] == 1이었고 방문했다면 해당 정사각형(색종이)의 크기로 변경하기로 하자.
 visited = [row.copy() for row in board]
 
 # cnt_left[k] = k*k 크기의 색종이 남은 개수
@@ -18,7 +18,9 @@ def find_largest_square(x, y):
     while x+max_width <= BSIZE and y+max_width <= BSIZE and max_width <= 5:
         for r in range(max_width):
             for c in range(max_width):
-                if board[x+r][y+c] != 1:
+                # FIXME 이게 문제였다. 1시간 반에 찾았
+                # if board[x+r][y+c] != 1:
+                if visited[x+r][y+c] != 1:
                     return max_width-1
         max_width += 1
     
@@ -30,7 +32,7 @@ def find_largest_square(x, y):
 def cover(x, y, max_width):
     for r in range(max_width):
         for c in range(max_width):
-            visited[x+r][y+c] = 2
+            visited[x+r][y+c] = max_width+1
 
 def uncover(x, y, max_width):
     for r in range(max_width):
@@ -38,7 +40,7 @@ def uncover(x, y, max_width):
             visited[x+r][y+c] = 1
             
 
-def next_fill(visited):
+def next_fill():
     for r in range(BSIZE):
         for c in range(BSIZE):
             if visited[r][c] == 1:
@@ -61,7 +63,7 @@ def solution(start_x, start_y, cnt):
         
         cnt_left[width] -= 1
         cover(start_x, start_y, width)
-        next_pos = next_fill(visited)
+        next_pos = next_fill()
         
         if next_pos == (-1, -1):
             cnt_left[width] += 1
@@ -109,3 +111,19 @@ if (start_x, start_y) != (-1, -1):
     print(solution(start_x, start_y, 0))
 else:
     print(0)
+    
+'''
+반례: (출처: https://www.acmicpc.net/board/view/41849)
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 0 0 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 1 1 1 1
+1 1 1 1 1 1 0 0 0 0
+정답: 9
+출력: 12
+'''
