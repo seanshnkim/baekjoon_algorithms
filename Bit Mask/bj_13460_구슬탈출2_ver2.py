@@ -105,7 +105,7 @@ def solution(red_loc, blue_loc, visited, cnt):
                 # 위에만 업데이트한 결과다.
                 # if moved_blue_loc == (-1, -1):
                 if moved_blue_loc == hole:
-                    update_board('R', moved_blue_loc, blue_loc)
+                    update_board('R', moved_red_loc, red_loc)
                     board[hole[0]][hole[1]] = 'O'
                 else:
                     if (moved_red_loc, moved_blue_loc) in visited:
@@ -156,7 +156,7 @@ print(solution(red_loc, blue_loc, visited, 0))
 '''
 
 '''
-여전히 20%, 21%에서 틀리는데 반례 찾았다.
+여전히 23%에서 틀리는데 반례 찾았다.
 7 8
 ########
 #.#.#.##
@@ -169,19 +169,4 @@ print(solution(red_loc, blue_loc, visited, 0))
 출력: 1
 '''
 
-'''
-또다시 반례:
-10 10
-##########
-#RB....#.#
-#..#.....#
-#........#
-#.O......#
-#...#....#
-#........#
-#........#
-#.......##
-##########
-ans : 10
-출력: 6
-'''
+# 현재 hole (O)이 board에서 사라지는 문제
