@@ -101,8 +101,12 @@ def solution(red_loc, blue_loc, visited, cnt):
             else:
                 update_board('R', red_loc, moved_red_loc)
                 moved_blue_loc = move(blue_loc, move_dir)
-                if moved_blue_loc == (-1, -1):
-                    update_board('R', moved_red_loc, red_loc)
+                # NOTE - blue가 hole에 빠지게 되는 경우를 (-1,-1)에서 hole로 고쳤어야 했는데... 기존 레가시 코드를 그대로 놔두고
+                # 위에만 업데이트한 결과다.
+                # if moved_blue_loc == (-1, -1):
+                if moved_blue_loc == hole:
+                    update_board('R', moved_blue_loc, blue_loc)
+                    board[hole[0]][hole[1]] = 'O'
                 else:
                     if (moved_red_loc, moved_blue_loc) in visited:
                         update_board('R', moved_red_loc, red_loc)
@@ -149,4 +153,35 @@ print(solution(red_loc, blue_loc, visited, 0))
 ##########
 정답: 10
 출력: -1
+'''
+
+'''
+여전히 20%, 21%에서 틀리는데 반례 찾았다.
+7 8
+########
+#.#.#.##
+########
+#...#..#
+#.OBR..#
+##.##..#
+########
+정답: 2
+출력: 1
+'''
+
+'''
+또다시 반례:
+10 10
+##########
+#RB....#.#
+#..#.....#
+#........#
+#.O......#
+#...#....#
+#........#
+#........#
+#.......##
+##########
+ans : 10
+출력: 6
 '''
