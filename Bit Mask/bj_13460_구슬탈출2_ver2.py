@@ -66,7 +66,9 @@ def solution(red_loc, blue_loc, visited, cnt):
         if is_blue_ahead(red_loc, blue_loc, move_dir):
             moved_blue_loc = move(blue_loc, move_dir)
             # blue_loc == (-1, -1)인 건 실패이므로 일단 건너뛴다(continue)
-            if blue_loc != hole:
+            # FIXME - 틀린 이유를 찾았다.
+            # if blue_loc != hole:
+            if moved_blue_loc != hole:
                 update_board('B', blue_loc, moved_blue_loc)
                 moved_red_loc = move(red_loc, move_dir)
                 if moved_red_loc == hole:
