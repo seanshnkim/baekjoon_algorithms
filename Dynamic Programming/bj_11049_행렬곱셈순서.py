@@ -6,24 +6,26 @@ matrices = [tuple(map(int, input().split())) for _ in range(N)]
 dp = [[[-1,-1,-1,-1] for _ in range(N)] for _ in range(N)]
 
 def solution(s, e):
+    if s == e:
+        return [0, matrices[s][0], matrices[s][1]]
+    
     if -1 not in dp[s][e]:
         return dp[s][e]
     
     if e - s == 1:
         cur_sum = matrices[s][0] * matrices[s][1] * matrices[e][1]
-        dp[s][e] = [cur_sum, matrices[s][0], matrices[s][1], matrices[e][1]]
+        dp[s][e] = [cur_sum, matrices[s][0], matrices[e][1]]
         return dp[s][e]
     
-    sum1, *res1 = solution(s, e-1)
-    sum2, *res2 = solution(s+1, e)
-    
-    ans1 = sum1 + res1[0] * matrices[e][0] * matrices[e][1]
-    ans2 = sum2 + matrices[s][0] * matrices[s][1] * res2[2]
-    
-    if ans1 < ans2:
-        dp[s][e] = [ans1, res1[0], matrices[e][0], matrices[e][1]]
-    else:
-        dp[s][e] = [ans2, matrices[s][0], matrices[s][1], res2[2]]
+    ans = -1
+    for i in range(e-s):
+        sum1, *res1 = solution(s, s+i)
+        sum2, *res2 = solution(s+i+1, e)
+        
+        cur_sum = sum1 + sum2 + res1[0]*res1[1]*res2[1]
+        if ans == -1 or cur_sum < ans:
+            ans = cur_sum
+            dp[s][e] = [ans, res1[0], res2[1]]
     
     return dp[s][e]
 
