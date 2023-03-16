@@ -45,3 +45,10 @@ for i in range(lenB-1, -1, -1):
     
 
 print(dp[0][1])
+
+'''반례:
+AAA
+AAAB
+정답: 3
+출력: 1
+'''
