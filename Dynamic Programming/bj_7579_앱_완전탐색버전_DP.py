@@ -1,24 +1,36 @@
 import sys
 input = sys.stdin.readline
 
+
+def dfs(i, inact_mem, mem):
+    global answer
+    
+    if i == N or mem >= M:
+        return
+    
+    sum_mem = mem + memories[i]
+    sum_inact = inact_mem + inact_memories[i]
+    if sum_mem >= M:
+        sum_mem = M
+    if dp[sum_mem] == -1 or dp[sum_mem] > sum_inact:
+        dp[sum_mem] = sum_inact
+        
+    # memories[i]를 더하지 않는 경우
+    dfs(i+1, inact_mem, mem)
+    # memories[i]를 더하는 경우
+    dfs(i+1, dp[sum_mem], sum_mem)
+
+
 N, M = map(int, input().split())
 memories = list(map(int, input().split()))
-inact_mem = list(map(int, input().split()))
-mem_tuples = [(inact, mem) for inact, mem in zip(inact_mem, memories)]
-# 비활성화 메모리를 기준으로 오름차순 정렬
-mem_tuples.sort(key=lambda x: (x[0], x[1]))
+inact_memories = list(map(int, input().split()))
+dp = [-1]*(M+1)
 
-dp = [0]*N
-dp[0] = mem_tuples[0][0]
+dfs(0, 0, 0)
 
-answer = dp[0]
-for i in range(1, N):
-    dp[i] = dp[i-1] + mem_tuples[i][1]
-    answer += mem_tuples[i][0]
-    if dp[i] >= M:
-        break
-    
-print(answer)
+print(dp[M])
+
+
 
 '''
 5 60
@@ -62,6 +74,36 @@ M = 60
 (3, 30) + (5, 35) -> (8, 65)
 
 (4, 40) + 
+
+
+반례 2)
+N = 4, M = 80
+20 20 40 80  
+3  3  4  5  
+내 풀이가 잘못되었다.
+
+1개만 쓴 경우 (여기선 M = 대충 한 120이라 생각하자)
+(3, 20)
+(3, 20)
+(4, 40)
+(5, 80)
+
+2개를 쓴 경우
+if dp[][1] (메모리 값) >= M:
+    break
+else:
+    dp[][1] (메모리 값) + 현재 메모리 값
+    그렇게 해서 더한 결과가 M 이상이면,
+    비활성 메모리를...
+    
+(3, 20) + (3, 20) -> (6, 40)
+(3, 20) + (4, 40) -> (7, 60)
+(3, 20) + (5, 80) -> (8, 100)
+(3, 20) + (4, 40) -> (7, 60)
+(3, 20) + (5, 80) -> (8, 100)
+(4, 40) + (5, 80)
+
+비트마스크를 활용해서 하면... N = 100일 땐 2 << 100 -> 감당 안되는 숫자다.
 
 '''
 
