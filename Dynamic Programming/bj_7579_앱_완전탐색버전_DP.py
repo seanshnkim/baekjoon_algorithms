@@ -7,17 +7,20 @@ def dfs(i, inact_mem, mem):
     
     if i == N or mem >= M:
         return
-    
+    # or (dp[sum_mem] != -1 and inact_mem >= dp[sum_mem])
     sum_mem = mem + memories[i]
     sum_inact = inact_mem + inact_memories[i]
+    # 더 이상 dp 배열 업데이트의 의미가 없으므로 불필요한 계산 중단
+    
     if sum_mem >= M:
         sum_mem = M
     if dp[sum_mem] == -1 or dp[sum_mem] > sum_inact:
         dp[sum_mem] = sum_inact
-        
+
     # memories[i]를 더하지 않는 경우
     dfs(i+1, inact_mem, mem)
-    # memories[i]를 더하는 경우
+    if dp[M] != -1 and sum_inact >= dp[M]:
+        return
     dfs(i+1, dp[sum_mem], sum_mem)
 
 
