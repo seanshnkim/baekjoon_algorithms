@@ -10,7 +10,7 @@ dp = [0] * (length)
 
 app_info = []
 for i in range(n):
-    app_info.append((costs[i],mems[i]))
+    app_info.append((costs[i], mems[i]))
 
 for cost, mem in app_info:
     check = set()

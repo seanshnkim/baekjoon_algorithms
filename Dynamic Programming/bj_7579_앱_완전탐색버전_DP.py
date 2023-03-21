@@ -1,44 +1,68 @@
 import sys
 input = sys.stdin.readline
-
-
-def dfs(i, inact_mem, mem):
-    global answer
-    
-    if i == N or mem >= M:
-        return
-    # or (dp[sum_mem] != -1 and inact_mem >= dp[sum_mem])
-    sum_mem = mem + memories[i]
-    sum_inact = inact_mem + inact_memories[i]
-    # 더 이상 dp 배열 업데이트의 의미가 없으므로 불필요한 계산 중단
-    
-    if sum_mem >= M:
-        sum_mem = M
-    if dp[sum_mem] == -1 or dp[sum_mem] > sum_inact:
-        dp[sum_mem] = sum_inact
-
-    # memories[i]를 더하지 않는 경우
-    dfs(i+1, inact_mem, mem)
-    if dp[M] != -1 and sum_inact >= dp[M]:
-        return
-    dfs(i+1, dp[sum_mem], sum_mem)
-
+from itertools import accumulate
 
 N, M = map(int, input().split())
 memories = list(map(int, input().split()))
-inact_memories = list(map(int, input().split()))
-dp = [-1]*(M+1)
+costs = list(map(int, input().split()))
+sum_costs = sum(costs)
+mem_costs = [(costs[i], memories[i]) for i in range(N)]
+mem_costs.sort(key=lambda x: (x[0], x[1]))
+acc_sum_costs = list(accumulate(x[0] for x in mem_costs))
 
-dfs(0, 0, 0)
+# dp 배열에는 memory (앱 메모리)가 담겨있어야 함
+dp = [0]*(sum_costs+1)
 
-print(dp[M])
+for i in range(N):
+    cost, mem = mem_costs[i]
+    
+    for c in range(cost, acc_sum_costs[i]+1):
+        if dp[c] == 0 or (dp[c] < dp[c-cost] + mem):
+            if cost == 0:
+                # dp[c] = mem이 아니다
+                dp[c] += mem
+            elif dp[c-cost] > 0 or c == cost:
+                dp[c] = dp[c-cost] + mem
+            
+            '''
+            5 60
+            30 10 20 35 40
+            3 0 3 5 4
+            처음엔 cost = 0, acc_sum_costs[i] = 0
+            dp[0] -> 10
+            dp[1]
+            '''
 
+for c in range(sum_costs):
+    if dp[c] >= M:
+        print(c)
+        break
 
+'''
+dp[0] = 
+dp[3] = 20
+==========
+dp[6] = 40
+==========
+dp[7] = 60
+dp[10] = 100
+==========
+dp[5] = 80
+dp[8] = 100
+dp[9] = 120
+dp[12] = 120
+
+'''
 
 '''
 5 60
 30 10 20 35 40
 3 0 3 5 4
+0 -> (0, 10) 만 쓸 수 있다
+0~3 -> ()
+3~6
+6~10
+10~15
 
 -> 정렬하면
 (0, 10)
