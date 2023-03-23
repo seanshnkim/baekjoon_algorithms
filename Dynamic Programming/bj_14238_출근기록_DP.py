@@ -1,81 +1,106 @@
 import sys
-from itertools import permutations
 input = sys.stdin.readline
+from itertools import combinations
 
 records = input().rstrip('\n')
-L = len(records)
+LENGTH = len(records)
+
+numA = records.count('A')
+numB = records.count('B')
+numC = LENGTH - (numA+numB)
 
 # L <= 50 -> 최대 크기: 125000
 # -1 : 업데이트 X
-dp = [ [[-1]*(L+1) for _ in range(L+1)] for _ in range(L+1)]
+# inner_list = [['']*3 for _ in range(3)]
+# dp = [i][j][k][pp][p]
+dp = [ [[ [['']*3 for _ in range(3)] ]*(numC+1) for _ in range(numB+1)] for _ in range(numA+1)]
+for i in range(3):
+    for j in range(3):
+        dp[0][0][1][2][j] = 'C'
+        dp[0][1][0][1][j] = 'B'
+        dp[1][0][0][0][j] = 'A'
+
+# dp[0][0][1][2][1] = 'C'라고 해보자
+# dp[0][0][2][]
+
+
+cur_string = ''
+for a in range(numA+1):
+    for b in range(numB+1):
+        for c in range(numC+1):
+            if a > 0:
+                # dp[a][b][c] <- A를 붙이는 경우
+                for i in range(3):
+                    # dp[A][B][C][마지막 문자(0 -> A, 1 -> B, 2 -> C)][두번째 마지막 문자]
+                    # 바로 그 이전 문자열 *...*X + A -> 
+                    # sum을 하면 안되고, 가능한 문자열만 솎아내서? 근데 가능한 문자열 중에 만약에 그 다음이 안되는 거면?
+                    # 일단 모르겠고 한번 해보자.
+                    # dp[a][b][c][0][i] = sum(dp[a-1][b][c][i])
+                    for j in range(3):
+                        if dp[a-1][b][c][i][j] != '':
+                            dp[a][b][c][0][i] = dp[a-1][b][c][i][j] + 'A'
+            if b > 0:
+                # ....AB <- ...AA + B 또는 ...BA + B 또는 ...CA + B. 3가지 모두 가능
+                # ....BB <- 땡!
+                # ....CB <- ...AC + B 또는 ...BC + B 또는 ...CC + B 3가지 모두 가능
+                # dp[a][b][c][B][A]
+                for i in range(3):
+                    for j in range(3):
+                        # 바로 이전 문자가 B이면 B를 붙일 수 없지만(i != 1), B를 처음으로 쓰는 것이라면(b == 1) B를 붙이는 게 가능하다.
+                        if b == 1 or i != 1:
+                            if dp[a][b-1][c][i][j] != '':
+                                # *...*X + B -> *...*
+                                dp[a][b][c][1][i] = dp[a][b-1][c][i][j] + 'B'
+                        
+            if c > 0:
+                # ....AC <- ...AA + C 또는 ...BA + C. ///// ...CA + C는 불가능.
+                # ....BC <- ...AB + C. ///// ...BB + C 와 ...CB + C는 불가능.
+                # for i in range(3):
+                #     if i == 2:
+                #         continue
+                #     for j in range(3):
+                #         if j == 2:
+                #             continue
+                #         if dp[a][b][c-1][i][j] != '':
+                #             dp[a][b][c][2][i] = dp[a][b][c-1][i][j] + 'C'
+                for i in range(3):
+                    for j in range(3):
+                        if c == 1 or (i != 2 and j != 2):
+                            if dp[a][b][c-1][i][j] != '':
+                                dp[a][b][c][2][i] = dp[a][b][c-1][i][j] + 'C'
+                
 '''
-CABAC라고 하자
-CABA, C -> okay
-    -> CAB, A -> okay
-        -> CA, B -> okay
-            -> C, A -> okay
-                -> C -> okay
+a+b+c = N을 만족하는 0 이상의 정수 a,b,c 해 가짓수 -> 중복순열?
+N을 n, a,b,c -> 숫자 개수를 k라 하자. 이때 k = 3
+위 경우의 수는 N개의 (같은) 공과 k-1개의 (같은) bar(a,b,c 세 숫자를 구분하기 위한 용도. m개의 숫자를 구분하려면 m-1개의 bar만 있으면 된다)
+를 배열하는 방법과 같으므로,
+combination(N=n+k-1, R=k-1)과 같다.
 '''
-
-def dfs(seq, numA, numB, numC, idx):
-    # 현재 문자열의 길이가 0이라면
-    if idx == 0:
-        return idx
-    
-    # 만약 현재 리턴하려는 값 dp[numA][numB][numC]이 -2이거나 -1이라면, 
-    # 0 이상이 될 때까지 업데이트를 해보아야 한다. 그게 아니면, 바로 dp 값을 출력한다.
-    if dp[numA][numB][numC] >= 0:
-        return dp[numA][numB][numC]
-        
-    if seq[idx] == 'A':
-        if dp[numA-1][numB][numC] == -1:
-            dp[numA-1][numB][numC] = dfs(seq, numA-1, numB, numC, idx-1)
-        
-        dp[numA][numB][numC] = dp[numA-1][numB][numC]
-    
-    elif seq[idx] == 'B':
-        if seq[idx-1] != 'B':
-            if dp[numA][numB-1][numC] == -1:
-                dp[numA][numB-1][numC] = dfs(seq, numA, numB-1, numC, idx-1)
-            dp[numA][numB][numC] = dp[numA][numB-1][numC]
-
-    else:
-        if idx > 1:
-            if seq[idx-1] != 'C' and seq[idx-2] != 'C':
-                if dp[numA][numB][numC-1] == -1:
-                    dp[numA][numB][numC-1] = dfs(seq, numA, numB, numC-1, idx-1)
-        elif idx == 1:
-            if seq[0] != 'C':
-                if dp[numA][numB][numC-1] == -1:
-                    dp[numA][numB][numC-1] = 0
-        dp[numA][numB][numC] = dp[numA][numB][numC-1]
-        
-    return dp[numA][numB][numC]
+for comb in combinations(range(LENGTH+2), r=2):
+    a, b = comb
+    nA = a
+    nB = b-a-1
+    nC = LENGTH - (nA+nB)
+    # nA + nB + nC = LENGTH
+    for i in range(3):
+        for j in range(3):
+            if dp[nA][nB][nC][i][j] != '':
+                print(dp[nA][nB][nC][i][j])
+                break
+            
 
 
-def solution(records):
-    len_rec = len(records)
-    nA = records.count('A')
-    nB = records.count('B')
-    nC = len_rec - (nA+nB)
-    
-    set_perm = set()
-    for sequence in permutations(records):
-        sequence = ''.join(sequence)
-        if sequence not in set_perm:
-            res = dfs(sequence, nA, nB, nC, len_rec-1)
-            set_perm.add(sequence)
-            if res != -1:
-                return sequence
-    return -1
-
-print(solution(records))
-    
 '''
-S의 모든 순열 중에서 올바른 출근 기록인 것을 하나만 출력한다.
-만약, 올바른 출근 기록이 없는 경우에는 -1을 출력한다.
+예를 들어서 CABCABBA 이면 
+numA = 3
+numB = 3
+numC = 2
 
-AAA...
-B*B*B...
-C**C**C...
+dp[0][0][0] ... dp[3][3][2]
+dp[2][2][2][0][1] -> numA = 2이고, numB = 2이고, numC = 2일 때,
+바로 전 글자가 0번째 알파벳(A)이고 전전 글자가 1번째 알파벳(B)인 가능한 문자열?
+AABBCC로 만들 수 있는 조합 중에... CABCBA 쯤이 되겠다
+그럼 바로 전 글자가 A니까 그 다음에 올 글자는 A,B,C 아무거나 가능
+만약 전 글자가 B이면 B는 그 다음에 못 올 거고
+전전 글자가 C이거나 전 글자가 C이면 C는 그 다음에 못 올 거고
 '''
