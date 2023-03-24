@@ -1,6 +1,5 @@
 import sys
 input = sys.stdin.readline
-from itertools import combinations
 
 records = input().rstrip('\n')
 LENGTH = len(records)
@@ -13,18 +12,17 @@ numC = LENGTH - (numA+numB)
 # -1 : 업데이트 X
 # inner_list = [['']*3 for _ in range(3)]
 # dp = [i][j][k][pp][p]
-dp = [ [[ [['']*3 for _ in range(3)] ]*(numC+1) for _ in range(numB+1)] for _ in range(numA+1)]
+dp = [ [ [ [['']*3 for _ in range(3)] for _ in range(numC+1)] for _ in range(numB+1)] for _ in range(numA+1)]
 for i in range(3):
-    for j in range(3):
-        dp[0][0][1][2][j] = 'C'
-        dp[0][1][0][1][j] = 'B'
-        dp[1][0][0][0][j] = 'A'
+    if numA > 0:
+        dp[1][0][0][0][i] = 'A'
+    if numB > 0:
+        dp[0][1][0][1][i] = 'B'
+    if numC > 0:
+        dp[0][0][1][2][i] = 'C'
 
-# dp[0][0][1][2][1] = 'C'라고 해보자
-# dp[0][0][2][]
 
 
-cur_string = ''
 for a in range(numA+1):
     for b in range(numB+1):
         for c in range(numC+1):
@@ -76,20 +74,14 @@ N을 n, a,b,c -> 숫자 개수를 k라 하자. 이때 k = 3
 를 배열하는 방법과 같으므로,
 combination(N=n+k-1, R=k-1)과 같다.
 '''
-for comb in combinations(range(LENGTH+2), r=2):
-    a, b = comb
-    nA = a
-    nB = b-a-1
-    nC = LENGTH - (nA+nB)
-    # nA + nB + nC = LENGTH
+def solution():
     for i in range(3):
         for j in range(3):
-            if dp[nA][nB][nC][i][j] != '':
-                print(dp[nA][nB][nC][i][j])
-                break
-            
+            if dp[numA][numB][numC][i][j] != '':
+                return dp[numA][numB][numC][i][j]
+    return -1
 
-
+print(solution())
 '''
 예를 들어서 CABCABBA 이면 
 numA = 3
