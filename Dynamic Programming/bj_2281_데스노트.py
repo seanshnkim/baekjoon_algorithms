@@ -51,9 +51,8 @@ least_sum = float('inf')
 for i in range(last_idx, N):
     
     for acc_sum, prev_left in dp[i]:
-        tmp = acc_sum + prev_left * prev_left
-        if tmp < least_sum:
-            least_sum = tmp
+        if acc_sum < least_sum:
+            least_sum = acc_sum
 
 print(least_sum)
 

@@ -1,56 +1,47 @@
 import sys
 input = sys.stdin.readline
-from itertools import accumulate
 
 N, M = map(int, input().split())
 memories = list(map(int, input().split()))
 costs = list(map(int, input().split()))
 sum_costs = sum(costs)
 mem_costs = [(costs[i], memories[i]) for i in range(N)]
-mem_costs.sort(key=lambda x: (x[0], x[1]))
-acc_sum_costs = list(accumulate(x[0] for x in mem_costs))
 
 # dp 배열에는 memory (앱 메모리)가 담겨있어야 함
 dp = [0]*(sum_costs+1)
 
-for i in range(N):
-    cost, mem = mem_costs[i]
-    
-    for c in range(cost, acc_sum_costs[i]+1):
-        if dp[c] == 0 or (dp[c] < dp[c-cost] + mem):
-            if cost == 0:
-                # dp[c] = mem이 아니다
-                dp[c] += mem
-            elif dp[c-cost] > 0 or c == cost:
-                dp[c] = dp[c-cost] + mem
-            
-            '''
-            5 60
-            30 10 20 35 40
-            3 0 3 5 4
-            처음엔 cost = 0, acc_sum_costs[i] = 0
-            dp[0] -> 10
-            dp[1]
-            '''
+for cost, mem in mem_costs:
+    for i in range(sum_costs, cost-1, -1):
+        dp[i] = max(dp[i], dp[i-cost]+mem)
 
-for c in range(sum_costs):
-    if dp[c] >= M:
-        print(c)
+for cost in range(sum_costs+1):
+    if dp[cost] >= M:
+        print(cost)
         break
-
 '''
-dp[0] = 
-dp[3] = 20
-==========
-dp[6] = 40
-==========
-dp[7] = 60
-dp[10] = 100
-==========
-dp[5] = 80
-dp[8] = 100
-dp[9] = 120
-dp[12] = 120
+5 60
+30 10 20 35 40
+3 0 3 5 4  -> sum_costs = 15
+
+costs[0]에 대해:
+dp[15] = max(dp[15], dp[15-3]+30) -> dp[15] = 30
+dp[14] = 30
+...
+dp[0] = 30 으로 모두 업데이트
+
+----------------------
+
+cost[1]에 대해:
+dp[15] = 30 + 10
+dp[14]
+...
+모두 10 씩 더해
+
+cost[2]에 대해:
+dp[15] = dp[12] + 20
+dp[12] = dp[1]
+
+
 
 '''
 

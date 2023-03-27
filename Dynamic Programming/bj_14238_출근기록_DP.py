@@ -66,6 +66,9 @@ for a in range(numA+1):
                         if c == 1 or (i != 2 and j != 2):
                             if dp[a][b][c-1][i][j] != '':
                                 dp[a][b][c][2][i] = dp[a][b][c-1][i][j] + 'C'
+                                '''
+                                기존 문자열: ABCBABC + C
+                                '''
                 
 '''
 a+b+c = N을 만족하는 0 이상의 정수 a,b,c 해 가짓수 -> 중복순열?
