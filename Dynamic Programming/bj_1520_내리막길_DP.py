@@ -24,14 +24,13 @@ while next_steps:
     
     for i in range(4):
         mx, my = x+dx[i], y+dy[i]
+        
         if (0 <= mx < H and 0 <= my < W) and dp[mx][my] != -1 and board[x][y] < board[mx][my]:
             if dp[x][y] == -1:
                 dp[x][y] = dp[mx][my]
             else:
                 dp[x][y] += dp[mx][my]
             
-    for i in range(4):
-        mx, my = x+dx[i], y+dy[i]
         if (0 <= mx < H and 0 <= my < W) and board[mx][my] < board[x][y] and not visited[mx][my]:
             # min heap이 기본이기 때문에 - 부호를 붙여준다.
             heapq.heappush(next_steps, (-board[mx][my], (mx, my))  )

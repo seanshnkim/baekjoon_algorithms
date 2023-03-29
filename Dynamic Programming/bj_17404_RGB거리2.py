@@ -3,94 +3,56 @@
 N번 집의 색은 N-1번, 1번 집의 색과 같지 않아야 한다.
 i(2 ≤ i ≤ N-1)번 집의 색은 i-1, i+1번 집의 색과 같지 않아야 한다.
 '''
-
 import sys
-from collections import namedtuple
 input = sys.stdin.readline
 
-Color = namedtuple("Color", ["red", "green", "blue"])
 N = int(input())
 costs = []
-for _ in range(N):
-    costs.append(Color(*map(int, input().split())))
+costs = [list(map(int, input().split())) for _ in range(N)]
 
-# dp[n][m][k][l] = V -> n: n번째 집 / m(0~2): n번째 집이 각각 red(0), green(1), blue(2)일 때
-# k(0~2): n-1번째 집(0번째 집에 대해서는 n번째 집을 의미)이 각각 red, green, blue일 때
-# l(0~2):  n+1번째 집(n번째 집에 대해서는 0번째 집을 의미)이 각각 red, green, blue일 때
-dp = [[[[0]*3
-        for _ in range(3)]
-       for _ in range(3)] 
-      for _ in range(N)]
+# for i in range(3):
+#     # dp[0]에 대해서는 왼쪽 칸이 없다고 가정하자
+#     dp[0][i][0] = costs[0].red
+#     dp[0][i][1] = costs[0].green
+#     dp[0][i][2] = costs[0].blue
 
 
-color_num_set = set([0,1,2])
-for c in range(3):
-    rest = list(color_num_set - {c})
-    for k in range(2):
-        for m in range(2):
-            dp[0][c][rest[k]][rest[m]] = costs[0][c]
+# for i in range(1, N-1):
+#     for c_prev in range(3):
+#         for c_cur in range(3):
+#             for j in range(3):
+#                 if dp[i-1][j][c_prev] > 0 and c_prev != c_cur:
+#                     dp[i][c_prev][c_cur] = dp[i-1][j][c_prev] + costs[i][c_cur]
+
+# NOTE: 이렇게 풀게 되면 0번째 칸이 red일 때, blue일 때, green일 때 일일이 다시 추적해야 한다.
+# 즉, dp[N-1]을 업데이트하게 됐을 때는 dp[N-2], dp[N-3]... dp[1] 이 모두 0번째 칸의 색깔 정보를 기억하고 있는 게 아니다.
+# -> 그렇다면 단순하게 생각: 어차피 색깔은 해봤자 3가지니까, 처음부터 0번째 칸의 색깔을 고정해놓고 dp 배열을 모두 업데이트한 다음 값을 구해서
+# 이렇게 0번째 칸을 red, green, blue 3가지 색깔로 칠했을 때 나오는 결과값을 비교만 하면 된다.
+
+def simulate(init_col):
+    dp = [[float('inf')]*3 for _ in range(N)]
+    dp[0][init_col] = costs[0][init_col]
+
+    for i in range(1, N):
+        for c_cur in range(3):
+            for c_prev in range(3):
+                if c_prev != c_cur and dp[i-1][c_prev] != float('inf'):
+                    dp[i][c_cur] = min(dp[i][c_cur], dp[i-1][c_prev])
+            if dp[i][c_cur] != float('inf'):
+                dp[i][c_cur] += costs[i][c_cur]
+    
+    
+    if init_col == 0:
+        min_cost = min(dp[-1][1], dp[-1][2])
+    elif init_col == 1:
+        min_cost = min(dp[-1][0], dp[-1][2])
+    else:
+        min_cost = min(dp[-1][0], dp[-1][1])
+    
+    return min_cost
 
 
-def return_min(idx_prev, prev, cur):
-    cur_min = float('inf')
-    for i in range(3):
-        tmp = dp[idx_prev][prev][i][cur]
-        if tmp > 0 and tmp < cur_min:
-            cur_min = tmp
-    return cur_min
-
-
-for i in range(1, N-1):
-    for c in range(3):
-        rest = list(color_num_set - {c})
-        for k in range(2):
-            for m in range(2):
-                dp[i][c][rest[k]][rest[m]] = return_min(i-1, rest[k], c)
-                if dp[i][c][rest[k]][rest[m]] > 0:
-                    dp[i][c][rest[k]][rest[m]] += costs[i][c]
-                # 현재 칸의 color c는 dp[i-1][*][X][*] X와 같을 때에 가져온다.
-                # 현재 칸(n번째) idx / 현재 color / n-1번째 color / n+1번째 color
-                
-                    
-# dp[N-1]에 대해서는 별도로 처리해야
-'''
-dp[N-1][0]
-'''
-
-for c in range(3):
-    rest = list(color_num_set - {c})
-    for k in range(2):
-        for m in range(2):
-            # FIXME
-            # dp[N-1][c][rest[k]][rest[m]] = 0
-            cur_min = float('inf')
-            for j in range(3):
-                for p in range(3):
-                    tmp1 = dp[0][rest[k]][c][j]
-                    tmp2 = dp[N-2][rest[m]][p][c]
-                    if tmp1 > 0:
-                        cur_min = min(cur_min, tmp1)
-                    if tmp2 > 0:
-                        cur_min = min(cur_min, tmp2)
-                        
-            if cur_min != float('inf'):
-                dp[N-1][c][rest[m]][rest[k]] = cur_min
-                dp[N-1][c][rest[m]][rest[k]] += costs[N-1][c]
-
-
-ans = float('inf')
-for c in range(3):
-    for k in range(3):
-        for m in range(3):
-            if dp[N-1][c][k][m] > 0 and ans > dp[N-1][c][k][m]:
-                ans = dp[N-1][c][k][m]
-print(ans)
-
-'''
-dp[N-1][0] -> (dp[0][1][0][j], dp[N-2][2][k][0])
-              (dp[0][1][0][j], dp[N-2][1][k][0])
-              (dp[0][2], dp[N-2][1])
-              (dp[0][2], dp[N-2][2])
-dp[N-1][0] -> dp[0][]
-dp[0][1]
-'''
+answer = float('inf')
+for color in range(3):
+    answer = min(answer, simulate(color))
+print(answer)

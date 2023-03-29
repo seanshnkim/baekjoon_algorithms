@@ -21,12 +21,5 @@ for i in range(1, N):
                 dp[j][j+i] = tmp_sum
                 
             products[j][j+i] = matrices[j][0] * matrices[j+i][1]
-            # sum1, mat1_row, mat1_col = dp[j][j+k]
-            # sum2, mat2_row, mat2_col = dp[j+k+1][j+i]
-            
-            # cur_sum = sum1 + sum2 + mat1_row * products[j+k+1][j+i]
-            
-            # if dp[j][j+i][0] == 0 or cur_sum < dp[j][j+i][0]:
-            #     dp[j][j+i] = [cur_sum, matrices[j][0], matrices[j+i][1]]
 
 print(dp[0][-1])

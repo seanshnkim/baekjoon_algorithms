@@ -12,7 +12,14 @@ numC = LENGTH - (numA+numB)
 # -1 : 업데이트 X
 # inner_list = [['']*3 for _ in range(3)]
 # dp = [i][j][k][pp][p]
-dp = [ [ [ [['']*3 for _ in range(3)] for _ in range(numC+1)] for _ in range(numB+1)] for _ in range(numA+1)]
+
+dp = [ [ [ [
+              ['']*3 
+            for _ in range(3)] 
+          for _ in range(numC+1)] 
+        for _ in range(numB+1)] 
+      for _ in range(numA+1)]
+
 for i in range(3):
     if numA > 0:
         dp[1][0][0][0][i] = 'A'
