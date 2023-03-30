@@ -30,11 +30,10 @@ while i < N-1:
         if numbers[i-1] <= numbers[i+1]:
             cnt += 1
             
-        elif numbers[i-1] > numbers[i+1]:
+        else:
             if numbers[i] > numbers[i+1]:
+                cnt = 0
                 break
-            else:
-                cnt += 1
                 
     i += 1
 
