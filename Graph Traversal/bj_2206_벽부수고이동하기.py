@@ -14,18 +14,18 @@ def bfs_with_wall(start_x, start_y):
     visited = [[-1]*W for _ in range(H)]
     answer = -1
     # q의 원소 튜플: cur_dist, x좌표, y좌표
-    q = deque([(0, 0, start_x, start_y)])
+    q = deque([(0, 1, start_x, start_y)])
     visited[start_x][start_y] = 0
     
     while q:
-        d, cur_break, x, y = q.popleft()
+        d, chance_break, x, y = q.popleft()
         
         if x == H-1 and y == W-1:
             if answer == -1 or answer > d:
                 answer = d
             break
         
-        if cur_break == 2:
+        if chance_break == 2:
             continue
         
         for i in range(4):
@@ -34,11 +34,27 @@ def bfs_with_wall(start_x, start_y):
             # 이제는 visited[mx][my] == -1일 때만 탐색 X
             # 벽을 한번 뚫고 탐색한 경우(visited -> 0), 그 다음에 벽을 뚫지 않고 탐색한 경우 (visited -> 1)
             # 따라서, visited 값이 1 이상이면 방문 완료한 ?
-            if 0 <= mx < H and 0 <= my < W and visited[mx][my] < 1:
+            if 0 <= mx < H and 0 <= my < W:
                 if board[mx][my] == 0:
-                    q.append((d+1, cur_break, mx, my))
+                    if visited[mx][my] == 1:
+                        continue
+                    if visited[mx][my] == 3 and chance_break == 0:
+                        continue
+                    
+                    if chance_break == 0:
+                        visited[mx][my] = 3
+                    else:
+                        visited[mx][my] = 1
+                        
+                    q.append((d+1, chance_break, mx, my))
+                    
                 else:
-                    q.append((d+1, cur_break+1, mx, my))
+                    if visited[mx][my] >= 1:
+                        continue
+                    if chance_break == 0:
+                        continue
+                        
+                    q.append((d+1, chance_break-1, mx, my))
 
     
     if answer == -1:
