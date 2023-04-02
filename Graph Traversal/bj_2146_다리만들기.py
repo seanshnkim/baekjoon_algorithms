@@ -73,6 +73,8 @@ def bfs_all_island(num_island):
                 cur_d, x, y = queues[cur_island-1].popleft()
                 
                 if cur_d > step:
+                    # FIXME - 이걸 추가 안했어서 틀렸다.
+                    queues[cur_island-1].appendleft((cur_d, x, y))
                     break
                 
                 for i in range(4):
@@ -118,4 +120,12 @@ print(bfs_all_island(num_island))
 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 1
+
+또다른 반례:
+5
+1 0 0 0 1
+0 0 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+0 1 0 0 1
 '''
