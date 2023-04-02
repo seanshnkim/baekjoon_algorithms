@@ -9,6 +9,20 @@ visited = [[False]*W for _ in range(H)]
 dx = [-1, 1, 0,  0]
 dy = [0,  0, -1, 1]
 
+def find_deadends():
+    deadends = []
+    for x in range(H):
+        for y in range(W):
+            if board[x][y] == 'L':
+                cnt = 0
+                for i in range(4):
+                    mx, my = x+dx[i], y+dy[i]
+                    if 0 <= mx < H and 0 <= my < W and board[mx][my] == 'L':
+                        cnt += 1
+                if cnt == 1:
+                    deadends.append((x, y))
+    return deadends
+
 
 def bfs(start_x, start_y):
     q = deque([(start_x, start_y, 0)])
@@ -32,11 +46,20 @@ def bfs(start_x, start_y):
     return max_dist
 
 
-answer = 0
-for r in range(H):
-    for c in range(W):
-        if board[r][c] == 'L':
+def solution(deadends):
+    global visited
+    answer = 0
+    if not deadends:
+        for r in range(H):
+            for c in range(W):
+                if board[r][c] == 'L' and not visited[r][c]:
+                    answer = max(answer, bfs(r, c))
+    
+    else:
+        for r, c in deadends:
             answer = max(answer, bfs(r, c))
             visited = [[False]*W for _ in range(H)]
-    
-print(answer)
+                
+    return answer
+
+print(solution(find_deadends()))

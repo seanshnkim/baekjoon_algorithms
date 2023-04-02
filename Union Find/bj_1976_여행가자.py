@@ -15,6 +15,7 @@ def find(x):
         parent[x] = root_x
         return root_x
 
+
 def rank_merge(a, b):
     root_a = find(a)
     root_b = find(b)
