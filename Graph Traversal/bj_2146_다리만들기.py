@@ -57,6 +57,8 @@ def bfs_all_island(num_island):
     distances = [[-1]*N for _ in range(N)]
     queues = [deque() for _ in range(num_island)]
     visited = [[-1]*N for _ in range(N)]
+    stop_search = False
+    answer = -1
     
     for r in range(N):
         for c in range(N):
@@ -68,6 +70,9 @@ def bfs_all_island(num_island):
     
     # N*N 보드에서 섬 간 가능한 최대 거리는 2N-2, 근데 그냥 편의상 2*N이라 하자.
     for step in range(2*N):
+        if stop_search:
+            break
+        
         for cur_island in range(1, num_island+1):
             while queues[cur_island-1]:
                 cur_d, x, y = queues[cur_island-1].popleft()
@@ -84,7 +89,14 @@ def bfs_all_island(num_island):
                         continue
                     
                     if visited[mx][my] != -1 and visited[mx][my] != cur_island:
-                        return cur_d + distances[mx][my]
+                        # FIXME - 바로 리턴하면 안되고, 여러 값이 나올 수 있고 최소값이 나중에 나올 수도 있기 때문에
+                        # 업데이트를 해야 한다.
+                        # return cur_d + distances[mx][my]
+                        if answer == -1 or answer > cur_d + distances[mx][my]:
+                            answer = cur_d + distances[mx][my]
+                            stop_search = True
+                            break
+                        
                     
                     if board[mx][my] == 0 and distances[mx][my] == -1:
                         distances[mx][my] = cur_d + 1
@@ -92,7 +104,7 @@ def bfs_all_island(num_island):
                         visited[mx][my] = cur_island
     
     # 디버깅을 위한 리턴값. 어떤 경우든 -1이 출력된다면 입력 테스트 케이스에 잘못이 있거나 코드에 문제가 있다는 뜻
-    return -1
+    return answer
         
 
 
