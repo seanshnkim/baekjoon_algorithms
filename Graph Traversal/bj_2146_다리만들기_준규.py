@@ -35,15 +35,14 @@ for i in range(N):
 
         num_island += 1
         QI = deque()
-        
         island[i][j] = num_island
         QI.append((i, j))
 
         while QI:
             x, y = QI.popleft()
 
-            for i in range(4):
-                mx, my = x+dx[i], y+dy[i]
+            for d in range(4):
+                mx, my = x+dx[d], y+dy[d]
 
                 if mx < 0 or my < 0 or mx >= N or my >= N:
                     continue
