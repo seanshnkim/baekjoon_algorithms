@@ -9,17 +9,13 @@ dy = [0, 1, 0, -1]
 
 N = int(input())
 board = [list(map(int, input().split())) for _ in range(N)]
-# way = [[0 for j in range(M_NUM)] for i in range(N_NUM)]
 way = [[0]*N for _ in range(N)]
 island = [[0]*N for _ in range(N)]
-# island = [[0 for j in range(M_NUM)] for i in range(N_NUM)]
 
 Q = deque()
 
 for i in range(N):
-    # row = list(map(int, input().split()))
     for j in range(N):
-        # board[i][j] = row[j]
         if board[i][j] == 1:
             Q.append((i, j))
             way[i][j] = 0
