@@ -30,15 +30,18 @@ for _ in range(M):
 # for m in range(M):
 #     if in_degree[orders[m][0]] == 0:
 #         roots.add(orders[m][0])
+# roots = deque(list(roots))
 
-roots = deque(list(roots))
-visited = [False]*(N+1)
+roots = deque()
+for i in range(1, N+1):
+    if in_degree[i] == 0:
+        roots.append(i)
+
 answer = []
 cnt = 0
 while roots:
     cur_root = roots.popleft()
     answer.append(cur_root)
-    visited[cur_root] = True
     cnt += 1
     
     for adj_node in graph[cur_root]:
@@ -46,18 +49,7 @@ while roots:
         if in_degree[adj_node] == 0:
             roots.append(adj_node)
 
-if cnt == N:
-    print(*answer, sep='\n')
+if cnt < N:
+    print(0)
 else:
-    is_cycle = False
-    isolated = []
-    for i in range(1, N+1):
-        if in_degree[i] > 0:
-            is_cycle = True
-            print(0)
-            break
-        elif not visited[i]:
-            isolated.append(i)
-            
-    if not is_cycle:
-        print(*(answer+isolated), sep='\n')
+    print(*answer, sep='\n')
