@@ -48,5 +48,9 @@ for i in range(3, N*N+1):
 
 for r in range(N):
     print(*board[r])
-
-print(ans_x, ans_y)
+if target == 1:
+    print(N//2+1, N//2+1)
+elif target == 2:
+    print(N//2, N//2+1)
+else:
+    print(ans_x, ans_y)
