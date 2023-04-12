@@ -2,44 +2,76 @@ import sys
 input = sys.stdin.readline
 
 H, W = map(int, input().split())
-visited = [[False]*W for _ in range(H)]
-# up, down, left, right
-dx = [-1, 1,  0, 0]
-dy = [0,  0, -1, 1]
 
-x, y = 0, 0
-visited[x][y] = True
 
-y += 1
-visited[x][y] = True
-prev_dir = 3
-cnt_move = 1
-cnt_turn = 0
-
-while cnt_move < H*W-1:
-    if prev_dir == 0:
-        next_dir = 3
-    elif prev_dir == 1:
-        next_dir = 2
-    elif prev_dir == 2:
-        next_dir = 0
-    else:
-        next_dir = 1
-        
-    # 일단 기존 방향대로 전진
-    nx, ny = x+dx[prev_dir], y+dy[prev_dir]
-    if 0 <= nx < H and 0 <= ny < W and not visited[nx][ny]:
-        x, y = nx, ny
-        visited[x][y] = True
-    else:
-        x, y = x+dx[next_dir], y+dy[next_dir]
-        visited[x][y] = True
-        prev_dir = next_dir
-        cnt_turn += 1
+def simulate(height, width):
+    cnt_turn = 0
+    end_loc = [0, 0]
     
-    cnt_move += 1
+    if height < width:
+        smaller = height
+        greater = width
+        is_horizontally_long = True
+    elif height > width:
+        smaller = width
+        greater = height
+        is_horizontally_long = False
+    
+    # if height == width:
+    else:
+        if height == 2:
+            cnt_turn = 2
+            end_loc = [1, 0]
 
+        elif height % 2 == 0:
+            cnt_turn = 4*(height//2-1)+2
+            end_loc = [height//2, width//2-1]
+        else:
+            cnt_turn = 4*(height//2)
+            end_loc = [height//2, width//2]
+        
+        end_loc[0] += 1
+        end_loc[1] += 1
+        return cnt_turn, end_loc
 
-print(cnt_turn)
-# 문제에선 (1, 1)부터 시작한다.
-print(x+1, y+1)
+    if smaller % 2 == 0:
+        if smaller == 2 and is_horizontally_long:
+            cnt_turn = 2
+            end_loc[0] += 1
+        else:    
+            while smaller > 2:
+                smaller -= 2
+                cnt_turn += 4
+                end_loc[0] += 1
+                end_loc[1] += 1
+            
+            if is_horizontally_long:
+                cnt_turn += 2
+            else:
+                cnt_turn += 3
+            
+            end_loc[0] += 1
+    
+    else:
+        while smaller > 1:
+            smaller -= 2
+            greater -= 2
+            cnt_turn += 4
+            end_loc[0] += 1
+            end_loc[1] += 1
+        
+        cnt_turn += 3
+        
+        if is_horizontally_long:
+            end_loc[1] += (greater-1)
+        else:
+            end_loc[0] += (greater-1)
+    
+    end_loc[0] += 1
+    end_loc[1] += 1
+    return cnt_turn, end_loc
+        
+    
+cnt, [end_x, end_y] = simulate(H, W)
+print(cnt)
+print(end_x, end_y)
