@@ -44,7 +44,7 @@ def fill(dir, x, y, visited):
     
 
     
-    
+
 
 
 # iter_cnt = 0, 1, 2, 3
@@ -67,9 +67,9 @@ def simulate(dir, x, y, visited):
         elif dir == 1:
             fill(2, x, y, visited)
         elif dir == 2:
-            fill(1, x, y, visited)
-        else:
             fill(0, x, y, visited)
+        else:
+            fill(1, x, y, visited)
             
         
     elif board[x][y] == 4:
@@ -92,28 +92,29 @@ def simulate(dir, x, y, visited):
         for d in range(4):
             fill(d, x, y, visited)
     
-    
 
-# num_cctv = 0
-# visited_init = [[False]*W for _ in range(H)]
-# for r in range(H):
-#     for c in range(W):
-#         if board[r][c] != 0:
-#             visited_init[r][c] = True
-#         if 1 <= board[r][c] <= 5:
-#             num_cctv += 1
+num_cctv = 0
+visited_init = [[False]*W for _ in range(H)]
+for r in range(H):
+    for c in range(W):
+        if board[r][c] != 0:
+            visited_init[r][c] = True
+        if 1 <= board[r][c] <= 5:
+            num_cctv += 1
         
-# answer = H*W
-# for i in range(1 << num_cctv*2):
-#     visited = [row.copy() for row in visited_init]
-#     cnt = 0
-#     for r in range(H):
-#         for c in range(W):
-#             if 1 <= board[r][c] <= 5:
-#                 k = (i >> (cnt*2)) & 3
-#                 simulate(k, r, c, visited)
-#                 cnt += 1
+answer = H*W
+for i in range(1 << num_cctv*2):
+    visited = [row.copy() for row in visited_init]
+    cnt = 0
+    for r in range(H):
+        for c in range(W):
+            if 1 <= board[r][c] <= 5:
+                k = (i >> (cnt*2)) & 3
+                simulate(k, r, c, visited)
+                cnt += 1
                 
-#     min_cnt = sum(sum(1 if not visited[r][c] else 0 for c in range(W)) \
-#                   for r in range(H))
-#     answer = min(answer, min_cnt)
+    min_cnt = sum(sum(1 if not visited[r][c] else 0 for c in range(W)) \
+                  for r in range(H))
+    answer = min(answer, min_cnt)
+
+print(answer)
