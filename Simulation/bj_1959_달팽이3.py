@@ -60,11 +60,10 @@ def simulate(height, width):
             end_loc[0] += 1
             end_loc[1] += 1
         
-        cnt_turn += 3
-        
         if is_horizontally_long:
             end_loc[1] += (greater-1)
         else:
+            cnt_turn += 1
             end_loc[0] += (greater-1)
     
     end_loc[0] += 1
