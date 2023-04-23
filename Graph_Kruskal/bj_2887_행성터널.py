@@ -1,5 +1,6 @@
 import sys
 input = sys.stdin.readline
+import heapq
 
 def cal_dist(xA, yA, zA, xB, yB, zB):
     return min(abs(xA-xB), abs(yA-yB), abs(zA-zB))
@@ -7,13 +8,41 @@ def cal_dist(xA, yA, zA, xB, yB, zB):
 N = int(input())
 planets = [list(map(int, input().split())) for _ in range(N)]
 
-edges = []
+X_edges = []
+Y_edges = []
+Z_edges = []
 for i in range(N):
     for j in range(i+1, N):
-        edges.append((i, j, cal_dist(*planets[i], *planets[j])) )
+        x_diff = abs(planets[i][0] - planets[j][0])
+        y_diff = abs(planets[i][1] - planets[j][1])
+        z_diff = abs(planets[i][2] - planets[j][2])
+        
+        if len(X_edges) == N:
+            heapq.heappushpop(X_edges, ((-1)*x_diff, i, j))
+        else:
+            heapq.heappush(X_edges, ((-1)*x_diff, i, j))
+            
+        if len(Y_edges) == N:
+            heapq.heappushpop(Y_edges, ((-1)*y_diff, i, j))
+        else:
+            heapq.heappush(Y_edges, ((-1)*y_diff, i, j))
+            
+        if len(Z_edges) == N:
+            heapq.heappushpop(Z_edges, ((-1)*z_diff, i, j))
+        else:
+            heapq.heappush(Z_edges, ((-1)*z_diff, i, j))
+
 
 parent = [*range(N)]
 rank = [0]*N
+edges = []
+
+for _, a, b in X_edges:
+    edges.append((a, b, cal_dist(*planets[a], *planets[b])) )
+for _, a, b in Y_edges:
+    edges.append((a, b, cal_dist(*planets[a], *planets[b])) )
+for _, a, b in Z_edges:
+    edges.append((a, b, cal_dist(*planets[a], *planets[b])) )
 
 edges.sort(key=lambda x: x[2])
 
