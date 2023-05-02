@@ -5,6 +5,7 @@ N = int(input())
 planets = [list(map(int, input().split())) + [i] for i in range(N)]
 edges = []
 
+
 for c in range(3):
     # x,y,z 좌표에 대해 정렬
     planets.sort(key=lambda x: x[c])
