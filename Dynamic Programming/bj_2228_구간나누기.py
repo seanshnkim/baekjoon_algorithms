@@ -30,6 +30,9 @@ if M > 1:
     for m in range(2, M+1):
         for i in range(N-1):
             cur = 0
+            # 복잡한 코드 -> 이렇게 굳이 경우 안 나눠도 되지 않을까?
+            # 이건 다 문제 2번 조건: 서로 다른 두 구간끼리 겹쳐있거나 인접해 있어서는 안 된다.
+            # 를 해결하기 위한 것임.
             
             if dp[m][0][i] == dp[m][0][i-1]:
                 cur = max(cur, dp[m][0][i-1] + dp[m][i+1][N-1])
@@ -41,5 +44,5 @@ if M > 1:
                (dp[m][i+1][N-1] != dp[m][i+2][N-1]):
                     if i < N -2:
                         cur = max(cur, dp[m][0][i] + dp[m][i+2][N-1])
-                    cur = max(dp[m][0][i-1] + dp[m][i+1][N-1])
+                    cur = max(dp[m][0][i-1] + dp[m][i+1][N-1])  
             
