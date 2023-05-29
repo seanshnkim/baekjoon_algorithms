@@ -19,7 +19,7 @@ while infos:
     if cur_d - time > 0:
         cur_max = cur_p
         i = 0
-        while infos and infos[0][0] == cur_d:
+        while infos:
             next_p = infos[0][1]
             if next_p > cur_max:
                 cur_max = next_p
