@@ -11,18 +11,22 @@ for _ in range(N):
     arrC.append(c)
     arrD.append(d)
 
-dict_AB = defaultdict(int)
+dict_AB = {}
 ans = 0
 
 for i in range(N):
     for j in range(N):
-        dict_AB[arrA[i] + arrB[j]] += 1
+        sum_AB = arrA[i] + arrB[j]
+        if sum_AB not in dict_AB.keys():
+            dict_AB[sum_AB] = 1
+        else:
+            dict_AB[sum_AB] += 1
 
 for i in range(N):
     for j in range(N):
-        cur = arrC[i] + arrD[j]
-        cur *= -1
-        if dict_AB[cur] > 0:
-            ans += dict_AB[cur]
+        sum_CD = arrC[i] + arrD[j]
+        sum_CD *= -1
+        if sum_CD in dict_AB.keys():
+            ans += dict_AB[sum_CD]
 
 print(ans)
