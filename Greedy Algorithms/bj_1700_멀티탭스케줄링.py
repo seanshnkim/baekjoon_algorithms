@@ -1,8 +1,10 @@
 import sys
 input = sys.stdin.readline
+from collections import Counter
 
 N, K = map(int, input().split())
 numbers = list(map(int, input().split()))
+num_cnts = Counter(numbers)
 
 cnt = 0
 i = 0
@@ -12,14 +14,12 @@ while cnt < N:
     if cur_num not in cur_set:
         cur_set.add(cur_num)
         cnt += 1
+    num_cnts[cur_num] -= 1
     i += 1
 
-ans = 0
+
 while i < K:
     cur_num = numbers[i]
     if cur_num not in cur_set:
-        # cur_set의 어떤 원소를 제거해야 할까?
+        # num_cnts 개수가 제일 적은 것부터 삭제
         ...
-        ans += 1
-    i += 1
-    
