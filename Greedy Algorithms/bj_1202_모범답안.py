@@ -1,7 +1,7 @@
 import sys
 input = sys.stdin.readline
-from bisect import bisect_left
 from collections import namedtuple
+import heapq
 
 Jewel = namedtuple('Jewel', ['weight', 'value'])
 
@@ -10,20 +10,19 @@ jewels = []
 for _ in range(num_jewel):
     w, v = map(int, input().split())
     jewels.append(Jewel(w, v))
-jewels.sort(key=lambda x: x.value, reverse=True)
+jewels.sort(key=lambda x: x.weight, reverse=True)
 
 bags = [int(input()) for _ in range(num_bag)]
 bags.sort()
 
+q = []
 ans = 0
 
-for i in range(num_jewel):
-    if num_bag == 0:
-        break
-    idx = bisect_left(bags, jewels[i].weight)
-    if num_bag > 0 and idx < num_bag:
-        ans += jewels[i].value
-        bags.pop(idx)
-        num_bag -= 1
+for i in range(num_bag):
+    while jewels and bags[i] >= jewels[-1].weight:
+        heapq.heappush(q, (-1)*jewels.pop().value)
+    
+    if q:
+        ans += (-1)*heapq.heappop(q)
 
 print(ans)
